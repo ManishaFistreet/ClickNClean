@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+.scrollbar-hide-hover {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollbar-hide-hover::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.hover\:scrollbar-show:hover {
+  scrollbar-width: thin;
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+
+.hover\:scrollbar-show:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5); /* gray-500 */
+  border-radius: 9999px;
+}
