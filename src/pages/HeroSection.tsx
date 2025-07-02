@@ -4,7 +4,7 @@ import Button from "../components/Button";
 const HeroSection = () => {
     return (
         <section
-            className="w-full py-20 bg-cover bg-no-repeat relative"
+            className="w-full py-20 bg-cover bg-no-repeat relative mt-2"
             style={{
                 backgroundImage: `url(${cover})`,
             }}

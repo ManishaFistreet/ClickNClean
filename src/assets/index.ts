@@ -73,7 +73,8 @@ import standard from "../assets/images/standard.png";
 import home from "../assets/images/home.jpg";
 import emptycart from "../assets/images/emptycart.jpg";
 import cover from "../assets/images/cover2.png";
-
+import clock from "../assets/icons/clock.svg";
+import phone from "../assets/icons/phone-call.svg";
 
 
 export {
@@ -151,5 +152,7 @@ export {
     hex3,
     hex4,
     hex5,
-    cover
+    cover,
+    clock,
+    phone
 };

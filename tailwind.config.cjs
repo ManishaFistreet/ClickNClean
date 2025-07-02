@@ -28,6 +28,14 @@ module.exports = {
         warning: " #FFCC00",     // Warning color
         success: " #28A745",     // Success color
         info: " #17A2B8",        // Info color
+        globalPrimary: " #37755C",
+        globalSecondary: " #0B1712",
+        globalText: " #595959",
+        globalAccent: " #B6D73E",
+        globalYellow: " #FFC107",
+        globalOliveLight: " #DEEDA8",
+        globalWhiteTexture: " #F8FBEC",
+        globalCreamish: " #FFFFFF",
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -37,6 +45,6 @@ module.exports = {
     },
   },
   plugins: [
-     require('tailwind-scrollbar'),
+    require('tailwind-scrollbar'),
   ],
 }

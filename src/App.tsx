@@ -33,7 +33,7 @@ function App() {
   return (
     <div className="font-sans">
       
-      <main className="pt-16">
+      <main>
         <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
         <HeroSection />
         <ServicesSection onAddToCart={handleAddToCart}  />
