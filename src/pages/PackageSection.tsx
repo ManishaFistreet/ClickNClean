@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { fetchPackages } from "../api/ServiceApi";
-import type { SubService } from "./ServicesAncCart";
 import { packages as packagesBg } from "../assets";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import type { Service } from "../types/services";
 
 interface PackageItem {
     _id: string;
@@ -23,6 +23,7 @@ interface PackageItem {
     packageDetail: string;
     packagePriceId: string;
     packageImageWeb?: string;
+    mappedPriceMaster:string;
     column1?: string;
     column2?: string;
     column3?: string;
@@ -30,7 +31,7 @@ interface PackageItem {
 }
 
 interface Props {
-    onAddToCart: (item: SubService) => void;
+    onAddToCart: (item: Service) => void;
     isAuthenticated?: boolean;
     setShowLoginInHero?: (val: boolean) => void;
     heroRef?: React.RefObject<HTMLDivElement>;
@@ -140,7 +141,7 @@ const PackageSection = ({ onAddToCart }: Props) => {
                                     <Button
                                         fullWidth
                                         onClick={() =>
-                                            onAddToCart({ _id: pkg._id, name: pkg.packageName, price: 999 })
+                                            onAddToCart({ _id: pkg._id, serviceName: pkg.packageName })
                                         }
                                         variant="contained"
                                         sx={{

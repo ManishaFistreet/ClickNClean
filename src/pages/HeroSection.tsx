@@ -4,7 +4,7 @@ import Button from "../components/Button";
 const HeroSection = () => {
     return (
         <section
-            className="w-full py-20 bg-cover bg-no-repeat relative mt-2"
+            className="w-full py-20 bg-cover bg-no-repeat relative mt-12"
             style={{
                 backgroundImage: `url(${cover})`,
             }}
@@ -21,7 +21,7 @@ const HeroSection = () => {
                         Providing spotless cleaning services for busy people since 2035. Always on time, always smiling.
                     </p>
                     <div className="mt-6">
-                        <Button variant="secondary" className="text-text hover:bg-primary-50">
+                        <Button variant="primary">
                             Book Now
                         </Button>
                     </div>

@@ -1,18 +1,17 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./pages/HeroSection";
-import PackageSection from "./pages/PackageSection";
-import { type CartItem, type SubService } from "./pages/ServicesAncCart";
 import ServicesSection from "./pages/ServicesSection";
 import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
 import './App.css';
+import type { CartItem, CartItemBase } from "./types/services";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const handleAddToCart = (item: SubService) => {
+  const handleAddToCart = (item: CartItemBase) => {
     setCart((prev) => {
       const existing = prev.find((c) => c._id === item._id);
       if (existing) {
@@ -37,7 +36,6 @@ function App() {
         <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
         <HeroSection />
         <ServicesSection onAddToCart={handleAddToCart}  />
-        <PackageSection onAddToCart={handleAddToCart}  />
       </main>
 
       <CartModal
