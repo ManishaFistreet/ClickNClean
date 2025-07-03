@@ -4,6 +4,7 @@ import HeroSection from "./pages/HeroSection";
 import ServicesSection from "./pages/ServicesSection";
 import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
+import ReviewSection from "./pages/Reviews";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 
@@ -30,21 +31,24 @@ function App() {
   };
 
   return (
-    <div className="font-sans">
-      
-      <main>
+   <div className="min-h-screen flex flex-col font-sans">
+      {/* Content area that grows */}
+      <main className="flex-grow">
         <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
         <HeroSection />
         <ServicesSection onAddToCart={handleAddToCart}  />
       </main>
 
+      {/* Cart Modal */}
       <CartModal
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cart={cart}
         onRemoveFromCart={handleRemoveFromCart}
       />
+      <ReviewSection/>
 
+      {/* Footer always sticks to bottom */}
       <Footer />
     </div>
   );
