@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { ShoppingCart } from "lucide-react";
-import type { CartItem } from "./ServicesAncCart";
+import type { CartItem } from "../types/services";
 
 type Props = {
   isOpen: boolean;

@@ -2,13 +2,40 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:5000/api";
 
+const api = axios.create({
+  baseURL: BASE_URL,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export const fetchServices = async () => {
-  const res = await axios.get(`${BASE_URL}/services`);
-  return res.data;
+  try {
+    const res = await api.get("/service-master");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    return []; 
+  }
 };
 
 export const fetchPackages = async () => {
-  const res = await axios.get(`${BASE_URL}/package`);
-  const data =Array.isArray(res.data) ? res.data : [];
-  return data;
+  try {
+    const res = await api.get("/package");
+    return Array.isArray(res.data) ? res.data : [];
+  } catch (error) {
+    console.error("Error fetching packages:", error);
+    return [];
+  }
+};
+
+export const fetchPrices = async () => {
+  try {
+    const res = await api.get("/service-price");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching prices:", error);
+    return [];
+  }
 };
