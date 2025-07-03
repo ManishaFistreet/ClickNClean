@@ -1,10 +1,10 @@
 import React from "react";
-
+import { facebook } from "../assets";
+import { X } from "../assets";
+import { instagram } from "../assets";
 const Footer = () => {
   return (
     <>
-      
-
       <footer className="w-full bg-[#2a4f3e]">
         <div className="max-w-7xl mx-auto mt-[-2rem]">
           {/* White Top Box */}
@@ -23,15 +23,19 @@ const Footer = () => {
             </h2>
 
             {/* Social Icons */}
-            <div className="flex space-x-3 mt-4 md:mt-0">
-              {["facebook", "twitter", "instagram", "youtube"].map((icon, i) => (
-                <button
-                  key={i}
-                  className="bg-[#c4e529] hover:bg-lime-500 w-9 h-9 rounded-full flex items-center justify-center text-white transition"
-                >
-                  <i className={`bi bi-${icon}`}></i>
-                </button>
-              ))}
+            <div className="flex space-x-4 mt-4 md:mt-0">
+              <div className="bg-lime-400 p-3 rounded-full" style={{ width: '45px', height: '45px' }}>
+                <img src={facebook} />
+              </div>
+              <div className="bg-lime-400 p-3 rounded-full" style={{ width: '45px', height: '45px' }}>
+                <img src={X} />
+
+              </div>
+              <div className="bg-lime-400 p-3 rounded-full" style={{ width: '45px', height: '45px' }}>
+                <img src={instagram} />
+
+              </div>
+
             </div>
           </div>
 

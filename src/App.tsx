@@ -6,7 +6,7 @@ import { type CartItem, type SubService } from "./pages/ServicesAncCart";
 import ServicesSection from "./pages/ServicesSection";
 import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
-
+import ReviewSection from "./pages/Reviews";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -47,6 +47,7 @@ function App() {
         cart={cart}
         onRemoveFromCart={handleRemoveFromCart}
       />
+      <ReviewSection/>
 
       {/* Footer always sticks to bottom */}
       <Footer />
