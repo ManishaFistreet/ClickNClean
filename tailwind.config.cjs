@@ -38,10 +38,18 @@ module.exports = {
         globalCreamish: " #FFFFFF",
       },
       fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
         mono: ['Courier New', 'monospace'],
       },
-      scrollBar: ['rounded', 'hover']
+      scrollBar: ['rounded', 'hover'],
+      fontSize: {
+        sm: "12px",
+        md: "16px",
+        lg: "20px",
+        xl: "24px",
+        xxl: "30px"
+      }
     },
   },
   plugins: [
