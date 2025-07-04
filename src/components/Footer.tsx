@@ -2,6 +2,7 @@ import React from "react";
 import { facebook } from "../assets";
 import { X } from "../assets";
 import { instagram } from "../assets";
+import Rating from '@mui/material/Rating';
 const Footer = () => {
   return (
     <>
@@ -86,25 +87,17 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Newsletter */}
+
             <div>
-              <h3 className="font-semibold text-black mb-3">Newsletter</h3>
-              <p className="text-sm text-gray-700 mb-3">
-                Subscribe our newsletter to get our latest update & news
-              </p>
-              <form className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="p-2 rounded-md border border-gray-300 text-sm text-gray-700"
-                />
+              <h3 className="font-semibold text-black mb-3">Give your Rating & Review</h3>
+              <Rating name="no-value" value={null}   style={{marginLeft:'35px',marginBottom:''}}/>
+              <div style={{marginLeft:'40px'}}>
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-lime-400 to-lime-600 text-white text-sm py-2 rounded-md shadow-md hover:opacity-90 transition"
-                >
-                  Subscribe
+                  className="bg-gradient-to-r from-lime-400 to-lime-600 text-white text-base px-6 py-3 rounded-md shadow-md hover:opacity-90 transition">
+                  Submit
                 </button>
-              </form>
+              </div>
             </div>
           </div>
 

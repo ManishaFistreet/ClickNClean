@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { ShoppingCart } from "@mui/icons-material";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
 type NavbarProps = {
   cartCount: number;
@@ -34,7 +35,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
           <a href="#plans" className="hover:text-globalPrimary transition font-bold">Plans</a>
           <a href="#services" className="hover:text-globalPrimary transition font-bold">Services</a>
           <a href="#offers" className="hover:text-globalPrimary transition font-bold">Offers</a>
-          <a href="#about" className="hover:text-globalPrimary transition font-bold">About</a>
+          <Link to="/about" className="hover:text-globalPrimary font-bold">About</Link>
           <a href="#login" className="hover:text-globalPrimary transition flex items-center gap-1 font-bold">
             Log In <FaUserCircle className="text-xl" />
           </a>
