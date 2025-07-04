@@ -5,6 +5,7 @@ import ServicesSection from "./pages/ServicesSection";
 import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
 import ReviewSection from "./pages/Reviews";
+import AboutUs from "./pages/AboutUs";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 
@@ -47,7 +48,7 @@ function App() {
         onRemoveFromCart={handleRemoveFromCart}
       />
       <ReviewSection/>
-
+<AboutUs/>
       {/* Footer always sticks to bottom */}
       <Footer />
     </div>
