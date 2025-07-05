@@ -3,7 +3,9 @@ import { facebook } from "../assets";
 import { X } from "../assets";
 import { instagram } from "../assets";
 import Rating from '@mui/material/Rating';
+import { Link } from "react-router-dom";
 const Footer = () => {
+    const [value, setValue] = React.useState<number | null>(); 
   return (
     <>
       <footer className="w-full bg-[#2a4f3e]">
@@ -79,7 +81,7 @@ const Footer = () => {
             <div>
               <h3 className="font-semibold text-black mb-3">Quick Links</h3>
               <ul className="text-sm text-gray-800 space-y-1">
-                <li>About Us</li>
+                <li> <Link to="/about" className="hover:text-globalPrimary font-bold">About</Link></li>
                 <li>Offers</li>
                 <li>Packages</li>
                 <li>Register as Professional</li>
@@ -90,7 +92,13 @@ const Footer = () => {
 
             <div>
               <h3 className="font-semibold text-black mb-3">Give your Rating & Review</h3>
-              <Rating name="no-value" value={null}   style={{marginLeft:'35px',marginBottom:''}}/>
+              <Rating
+        name="simple-controlled"
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        style={{marginLeft:'35px',marginBottom:''}}/>
               <div style={{marginLeft:'40px'}}>
                 <button
                   type="submit"
