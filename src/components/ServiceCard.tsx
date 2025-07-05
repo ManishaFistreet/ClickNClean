@@ -2,94 +2,116 @@ import React from 'react';
 import type { CartItem, EnhancedService } from '../types/services';
 
 type ServiceCardProps = {
-    service: EnhancedService;
-    index: number;
-    onAddToCart: (item: Omit<CartItem, 'quantity'> & { type: 'service' }) => void;
+  service: EnhancedService;
+  index: number;
+  onAddToCart: (item: Omit<CartItem, 'quantity'> & { type: 'service' }) => void;
 };
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onAddToCart }) => {
-    // Determine if there's an active offer
-    const hasOffer = service.prices?.some(price => {
-        if (!price.offerDiscount || !price.offerEnd) return false;
+  const hasOffer = service.prices?.some(price => {
+    if (!price.offerDiscount || !price.offerEnd) return false;
+    try {
+      const offerEndDate = new Date(price.offerEnd);
+      return offerEndDate > new Date();
+    } catch {
+      return false;
+    }
+  });
 
-        try {
-            const offerEndDate = new Date(price.offerEnd);
-            return offerEndDate > new Date();
-        } catch {
-            return false;
-        }
-    });
+  const bestPrice = service.prices?.reduce((best, current) => {
+    const currentDiscount = current.offerDiscount || 0;
+    const bestDiscount = best.offerDiscount || 0;
+    return currentDiscount > bestDiscount ? current : best;
+  }, service.prices[0]);
 
-    // Get the best available price (with offer if available)
-    const bestPrice = service.prices?.reduce((best, current) => {
-        const currentDiscount = current.offerDiscount || 0;
-        const bestDiscount = best.offerDiscount || 0;
-        return currentDiscount > bestDiscount ? current : best;
-    }, service.prices[0]);
+  const displayPrice = bestPrice?.actualPrice || service.currentActivePrice;
+  const displayPriceTag = bestPrice
+    ? `₹${displayPrice}${hasOffer ? ` (${bestPrice.offerDiscount}% off)` : ''}`
+    : service.showoffPriceTag;
 
-    const displayPrice = bestPrice?.actualPrice || service.currentActivePrice;
-    const displayPriceTag = bestPrice
-        ? `₹${displayPrice}${hasOffer ? ` (${bestPrice.offerDiscount}% off)` : ''}`
-        : service.showoffPriceTag;
-
-    return (
-        <div className={`
-      relative bg-white rounded-xl p-4 flex flex-col items-center text-center
-      shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200
-      ${hasOffer ? 'border-2 border-green-400' : ''}
-    `}>
-            {/* Offer Badge */}
-            {hasOffer && (
-                <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                    {bestPrice?.offerDiscount}% OFF
-                </div>
-            )}
-
-            {/* Service Icon */}
-            {service.serviceAppIcon && (
-                <div className="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center mb-4">
-                    <img
-                        src={service.serviceAppIcon}
-                        alt="service icon"
-                        className="w-8 h-8"
-                    />
-                </div>
-            )}
-
-            {/* Service Details */}
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                {service.serviceName}
-            </h3>
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {service.serviceDetail}
-            </p>
-
-            {/* Pricing Info */}
-            <div className="mb-3">
-                <span className="text-xl font-bold text-globalPrimary">
-                    {displayPriceTag}
-                </span>
-                {service.priceType === 'hourly' && (
-                    <span className="text-xs text-gray-500 ml-1">/hour</span>
-                )}
-            </div>
-
-            {/* Add to Cart Button */}
-            <button
-                onClick={() => onAddToCart({
-                    _id: service._id,
-                    name: service.serviceName,
-                    price: displayPrice,
-                    image: service.serviceWebImage,
-                    icon: service.serviceAppIcon,
-                    type: 'service'
-                })}
-                className="w-full mt-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300"
-            >
-                Add to Cart
-            </button>
+  return (
+    <div
+      className={`
+        relative bg-gradient-to-br from-globalWhiteTexture to-globalOliveLight
+        rounded-2xl p-4 flex flex-col text-center
+        shadow-md hover:shadow-lg transition-all duration-300
+        border-[3px] ${hasOffer ? 'border-globalAccent' : 'border-transparent'}
+      `}
+    >
+      {/* Offer Badge */}
+      {hasOffer && (
+        <div className="absolute top-2 right-2 bg-globalAccent text-globalSecondary text-xs font-bold px-2 py-1 rounded-full z-10">
+          {bestPrice?.offerDiscount}% OFF
         </div>
-    );
+      )}
+
+      {/* Icon Badge */}
+      {service.serviceAppIcon && (
+        <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white shadow flex items-center justify-center z-10">
+          <img
+            src={service.serviceAppIcon}
+            alt="service icon"
+            className="w-5 h-5"
+          />
+        </div>
+      )}
+
+      {/* Image */}
+      {service.serviceWebImage && (
+        <img
+          src={service.serviceWebImage}
+          alt={service.serviceName}
+          className="w-full h-40 object-cover rounded-xl mb-4"
+        />
+      )}
+
+      {/* Title */}
+      <h3 className="text-lg font-semibold text-globalSecondary mb-1">
+        {service.serviceName}
+      </h3>
+
+      {/* Description */}
+      <p className="text-sm text-globalText mb-3 line-clamp-2 px-2">
+        {service.serviceDetail}
+      </p>
+
+      {/* Price */}
+      <div className="mb-4">
+        <span className="text-xl font-bold text-globalPrimary">
+          {displayPriceTag}
+        </span>
+        {service.priceType === 'hourly' && (
+          <span className="text-xs text-gray-500 ml-1">/hour</span>
+        )}
+      </div>
+
+      {/* Learn more / Add to cart */}
+      <button
+        onClick={() =>
+          onAddToCart({
+            _id: service._id,
+            name: service.serviceName,
+            price: displayPrice,
+            image: service.serviceWebImage,
+            icon: service.serviceAppIcon,
+            type: 'service',
+          })
+        }
+        className="mt-auto flex items-center justify-between text-globalPrimary bg-white rounded-full px-4 py-2 text-sm font-medium border border-[#E0E0E0] hover:shadow transition"
+      >
+        Book Service
+        <svg
+          className="ml-2 w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  );
 };
 
 export default ServiceCard;

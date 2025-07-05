@@ -1,4 +1,3 @@
-import React from "react";
 import { facebook } from "../assets";
 import { X } from "../assets";
 import { instagram } from "../assets";
@@ -6,24 +5,18 @@ import Rating from '@mui/material/Rating';
 const Footer = () => {
   return (
     <>
-      <footer className="w-full bg-[#2a4f3e]">
-        <div className="max-w-7xl mx-auto mt-[-2rem]">
-          {/* White Top Box */}
+      <footer className="w-full bg-[#2a4f3e] pt-6">
+        <div className="max-w-7xl mx-auto mt-[-4rem]">
           <div className="bg-white rounded-t-2xl shadow-md px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center">
-            {/* Logo & Text */}
             <div className="flex items-center space-x-3">
               ✨
               <h1 className="text-xl font-bold text-green-700">
                 Click<span className="text-green-900">NClean</span>
               </h1>
             </div>
-
-            {/* Tagline */}
             <h2 className="text-lg font-semibold text-green-800 text-center mt-4 md:mt-0">
               Cleaning your worries away!
             </h2>
-
-            {/* Social Icons */}
             <div className="flex space-x-4 mt-4 md:mt-0">
               <div className="bg-lime-400 p-3 rounded-full" style={{ width: '45px', height: '45px' }}>
                 <img src={facebook} />
@@ -40,9 +33,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Main Grid Section */}
           <div className="bg-[#e1f0af] rounded-b-2xl px-6 md:px-12 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Contact */}
             <div>
               <h3 className="font-semibold text-black mb-3">Contact Us</h3>
               <p className="text-sm text-gray-700">

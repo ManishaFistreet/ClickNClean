@@ -39,3 +39,13 @@ export const fetchPrices = async () => {
     return [];
   }
 };
+
+export const fetchServiceById = async (id: string) => {
+  try {
+    const res = await api.get(`/service-master/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching service:", error);
+    throw error;
+  }
+};

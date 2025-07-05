@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import type { CartItemBase, EnhancedPackage, EnhancedService, PackageService, ServiceMaster, ServicePrice } from '../types/services';
+import { useState, useEffect } from 'react';
+import type {
+  CartItemBase,
+  EnhancedPackage,
+  EnhancedService,
+  PackageService,
+  ServiceMaster,
+  ServicePrice
+} from '../types/services';
 import PackageCard from '../components/PackageCard';
 import ServiceCard from '../components/ServiceCard';
 import { fetchPackages, fetchPrices, fetchServices } from '../api/ServiceApi';
+import Slider from 'react-slick';
 
 type Props = {
   onAddToCart: (item: CartItemBase) => void;
@@ -14,20 +22,37 @@ const ServicesSection = ({ onAddToCart }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: 2 }
+      },
+      {
+        breakpoint: 640,
+        settings: { slidesToShow: 1 }
+      }
+    ]
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
 
-        // Fetch all data in parallel
         const [servicesData, pricesData, packagesData] = await Promise.all([
           fetchServices(),
           fetchPrices(),
           fetchPackages()
         ]);
 
-        // Rest of your data processing logic...
-        const enhancedServices = servicesData.map((service : ServiceMaster) => {
+        const enhancedServices = servicesData.map((service: ServiceMaster) => {
           const servicePrices = pricesData.filter(
             (price: ServicePrice) => price.serviceCode === service.serviceCode && price.priceActiveStatus
           );
@@ -43,7 +68,7 @@ const ServicesSection = ({ onAddToCart }: Props) => {
             (service: EnhancedService) => service.serviceCode === pkg.mappedServiceCode
           );
           const includedPrices = pricesData.filter(
-            (price : ServicePrice) => price.pkgUniqueId === pkg.uniqueId && price.priceActiveStatus
+            (price: ServicePrice) => price.pkgUniqueId === pkg.uniqueId && price.priceActiveStatus
           );
 
           const packagePrice = includedServices.length > 0
@@ -58,7 +83,9 @@ const ServicesSection = ({ onAddToCart }: Props) => {
           };
         });
 
-        setServices(enhancedServices.filter((service: ServiceMaster) => service.serviceActiveStatus));
+        setServices(
+          enhancedServices.filter((service: ServiceMaster) => service.serviceActiveStatus)
+        );
         setPackages(enhancedPackages);
       } catch (err) {
         console.error("Failed to fetch data", err);
@@ -70,6 +97,7 @@ const ServicesSection = ({ onAddToCart }: Props) => {
 
     fetchData();
   }, []);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -86,53 +114,54 @@ const ServicesSection = ({ onAddToCart }: Props) => {
     );
   }
 
-  // Group services by category
-  const servicesByCategory = services.reduce((acc: Record<string, EnhancedService[]>, service) => {
-    if (!acc[service.serviceCategory]) {
-      acc[service.serviceCategory] = [];
-    }
-    acc[service.serviceCategory].push(service);
-    return acc;
-  }, {});
-
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto">
+    <section className="py-10 px-4 max-w-7xl mx-auto">
+
+      {/* All Services (Flat List) */}
+      <div className="mb-20">
+        <h1 className='text-md font-bold text-black text-center'>WHAT WE OFFER</h1>
+        <h2 className="text-xl font-bold text-globalPrimary text-center mb-10">
+          A cleaning service that’s professional and affordable
+        </h2>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {services.map((service, index) => (
+            <ServiceCard
+              key={service._id}
+              service={service}
+              index={index}
+              onAddToCart={onAddToCart}
+            />
+          ))}
+        </div>
+      </div>
+
       {/* Featured Packages Section */}
       {packages.length > 0 && (
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-globalPrimary text-center mb-8">
-            Special Packages
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {packages.map((pkg) => (
-              <PackageCard
-                key={pkg._id}
-                pkg={pkg}
-                onAddToCart={onAddToCart}
-              />
-            ))}
+          <div className="flex items-center justify-center mb-10">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <h2 className="mx-4 text-3xl font-bold text-globalPrimary text-center whitespace-nowrap">
+              Special Packages
+            </h2>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
+
+          <div className="relative px-4">
+            <Slider
+              {...settings} // Your existing slick settings
+              className="custom-slick-slider"
+            >
+              {packages.map((pkg) => (
+                <div key={pkg._id} className="px-3">
+                  <PackageCard pkg={pkg} onAddToCart={onAddToCart} />
+                </div>
+              ))}
+            </Slider>
           </div>
         </div>
       )}
 
-      {/* Services by Category */}
-      {Object.entries(servicesByCategory).map(([category, categoryServices]) => (
-        <div key={category} className="mb-12">
-          <h2 className="text-3xl font-bold text-globalPrimary text-center mb-8">
-            {category} Services
-          </h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {categoryServices.map((service, index) => (
-              <ServiceCard
-                key={service._id}
-                service={service}
-                index={index}
-                onAddToCart={onAddToCart}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
+
     </section>
   );
 };
