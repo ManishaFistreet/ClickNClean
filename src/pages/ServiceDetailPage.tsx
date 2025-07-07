@@ -13,6 +13,8 @@ const ServiceDetailPage = () => {
 
  useEffect(() => {
     if (serviceId) {
+        console.log("Service ID from URL:", serviceId);
+
       fetchServiceById(serviceId)
         .then(setService)
         .catch((error) => console.error("Error fetching service:", error));
@@ -43,7 +45,7 @@ const ServiceDetailPage = () => {
 
         <ul className="text-sm text-gray-500 space-y-1 mt-2">
           {service.serviceCategory && <li><strong>Category:</strong> {service.serviceCategory}</li>}
-          {service.minHours && service.maxHours && <li><strong>Duration:</strong> {service.minHours}-{service.maxHours}</li>}
+          {service.minHours && service.maxHours && <li><strong>Duration:</strong> {service.minHours}-{service.maxHours} HRS</li>}
         </ul>
 
         <Button variant="primary" className="mt-6 flex items-center gap-2 w-fit">

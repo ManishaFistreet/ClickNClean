@@ -52,7 +52,7 @@ function App() {
               }
             />
             <Route path="/about-us" element={ <AboutUs />} />
-            <Route path="/service/:id" element={<ServiceDetailPage />} />
+            <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
           </Routes>
         </main>
         <CartModal

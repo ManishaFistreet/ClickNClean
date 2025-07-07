@@ -29,6 +29,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
         console.log("Response for service menu", res);
         const grouped = res.reduce((acc: Record<string, EnhancedService[]>, service: EnhancedService) => {
           const category = service.serviceCategory || "Others";
+          console.log("Categories--",category);
           if (!acc[category]) acc[category] = [];
           acc[category].push(service);
           return acc;
@@ -60,7 +61,10 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
               setHoveredServiceImage(null);
             }}
           >
-            <a href="#services" className="hover:text-globalPrimary transition font-bold">Services</a>
+            <span className="hover:text-globalPrimary transition font-bold cursor-pointer">
+              Services
+            </span>
+
             {isMegaMenuOpen && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 w-[1000px] bg-white border rounded-xl shadow-xl p-6 z-50 flex gap-6">
                 {/* LEFT: Categories & Services */}
@@ -70,6 +74,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                       <h4 className="text-lg font-semibold text-globalPrimary mb-3">{category}</h4>
                       <ul className="space-y-1.5">
                         {services.map((service) => (
+                          service._id ? (
                           <li
                             key={service._id}
                             className="text-md text-gray-700 hover:text-globalPrimary transition-all hover:pl-1 cursor-pointer"
@@ -82,9 +87,10 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                             >
                               {service.serviceName}
                             </Link>
-                          </li>
+                          </li>): null
                         ))}
-                      </ul>
+                      </ul> 
+
                     </div>
                   ))}
                 </div>
