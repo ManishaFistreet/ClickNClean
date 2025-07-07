@@ -29,7 +29,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
         console.log("Response for service menu", res);
         const grouped = res.reduce((acc: Record<string, EnhancedService[]>, service: EnhancedService) => {
           const category = service.serviceCategory || "Others";
-          console.log("Categories--",category);
+          console.log("Categories--", category);
           if (!acc[category]) acc[category] = [];
           acc[category].push(service);
           return acc;
@@ -50,6 +50,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
         {/* Center - Nav Links */}
         <nav className="hidden md:flex gap-6 text-gray-800 font-medium mx-auto">
           <a href="/" className="hover:text-globalPrimary transition font-bold">Home</a>
+           <Link to="/about-us" className="hover:text-globalPrimary font-bold">About</Link>
           <a href="#plans" className="hover:text-globalPrimary transition font-bold">Plans</a>
 
           {/* Services Hover Mega Menu */}
@@ -66,7 +67,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
             </span>
 
             {isMegaMenuOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 w-[1000px] bg-white border rounded-xl shadow-xl p-6 z-50 flex gap-6">
+              <div className="absolute top-full left-0 -translate-x-1/2 w-[1200px] bg-white border rounded-xl shadow-xl p-6 z-50 flex gap-6">
                 {/* LEFT: Categories & Services */}
                 <div className="w-2/3 grid grid-cols-3 gap-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
                   {Object.entries(categories).map(([category, services]) => (
@@ -75,21 +76,21 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                       <ul className="space-y-1.5">
                         {services.map((service) => (
                           service._id ? (
-                          <li
-                            key={service._id}
-                            className="text-md text-gray-700 hover:text-globalPrimary transition-all hover:pl-1 cursor-pointer"
-                            onMouseEnter={() => setHoveredServiceImage(service.serviceWebImage ?? null)}
-                          >
-                            <Link
-                              to={`/service/${service._id}`}
-                              onClick={() => setMegaMenuOpen(false)}
-                              className="block text-sm text-gray-700 hover:text-globalPrimary transition"
+                            <li
+                              key={service._id}
+                              className="text-md text-gray-700 hover:text-globalPrimary transition-all hover:pl-1 cursor-pointer"
+                              onMouseEnter={() => setHoveredServiceImage(service.serviceWebImage ?? null)}
                             >
-                              {service.serviceName}
-                            </Link>
-                          </li>): null
+                              <Link
+                                to={`/service/${service._id}`}
+                                onClick={() => setMegaMenuOpen(false)}
+                                className="block text-sm text-gray-700 hover:text-globalPrimary transition"
+                              >
+                                {service.serviceName}
+                              </Link>
+                            </li>) : null
                         ))}
-                      </ul> 
+                      </ul>
 
                     </div>
                   ))}
@@ -114,12 +115,10 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
             )}
 
           </div>
-
+        
           <a href="#offers" className="hover:text-globalPrimary transition font-bold">Offers</a>
-          <Link to="/about" className="hover:text-globalPrimary font-bold">About</Link>
-          <a href="#login" className="hover:text-globalPrimary transition flex items-center gap-1 font-bold">
-            Log In <FaUserCircle className="text-xl" />
-          </a>
+         
+          <Link to='/login' className="hover:text-globalPrimary transition flex items-center gap-1 font-bold">Log In <FaUserCircle className="text-xl" /></Link>
         </nav>
 
         {/* Right - Book Now + Cart */}

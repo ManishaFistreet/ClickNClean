@@ -4,13 +4,14 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./pages/HeroSection";
 import ServicesSection from "./pages/ServicesSection";
-import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
 import ReviewSection from "./pages/Reviews";
 import AboutUs from "./pages/AboutUs";
 import ServiceDetailPage from "./pages/ServiceDetailPage";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
+import Register from "./components/RegisterLogin";
+import CartDrawer from "./pages/CartSection";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -53,9 +54,10 @@ function App() {
             />
             <Route path="/about-us" element={ <AboutUs />} />
             <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
+            <Route path="/login" element={<Register/>}/>
           </Routes>
         </main>
-        <CartModal
+         <CartDrawer
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
           cart={cart}

@@ -1,3 +1,4 @@
+import React from "react";
 import { facebook } from "../assets";
 import { X } from "../assets";
 import { instagram } from "../assets";

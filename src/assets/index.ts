@@ -15,6 +15,8 @@ import worker from "../assets/images/3rd-card.jpg"
 import user from "../assets/icons/user-icon.svg"
 import leaf from "../assets/icons/leaf.svg"
 import globe from "../assets/icons/globe.svg"
+import deleted from "../assets/icons/delete.svg"
+import close from "../assets/icons/close.svg"
 export {
     emptycart,
     cover,
@@ -32,6 +34,8 @@ export {
     worker,
     user,
     leaf,
-    globe
+    globe,
+    deleted,
+    close
     
 };
