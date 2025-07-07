@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 .scrollbar-hide-hover {
@@ -24,6 +23,22 @@
 }
 
 .hover\:scrollbar-show:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(107, 114, 128, 0.5); /* gray-500 */
+  background-color: rgba(107, 114, 128, 0.5);
   border-radius: 9999px;
+}
+
+.custom-slick-slider .slick-prev,
+.custom-slick-slider .slick-next {
+  /* z-index: 20; */
+  width: 40px;
+  height: 40px;
+  background: #B6D73E;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-slick-slider .slick-prev:before,
+.custom-slick-slider .slick-next:before {
+  color: #0B1712; 
+  font-size: 20px;
 }

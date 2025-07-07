@@ -16,7 +16,7 @@ export const fetchServices = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching services:", error);
-    return []; 
+    return [];
   }
 };
 
@@ -41,11 +41,22 @@ export const fetchPrices = async () => {
 };
 
 export const fetchReviews = async () => {
-  try{
+  try {
     const res = await api.get("/reviews");
     return res.data;
-  } catch(error) {
+  } catch (error) {
     console.error("Error fetching Reviews", error);
     return [];
+  }
+};
+
+export const fetchServiceById = async (id: string) => {
+  try {
+    const res = await api.get(`/service-master/${id}`);
+    console.log(res)
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching service:", error);
+    throw error;
   }
 };

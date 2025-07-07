@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 import Navbar from "./components/Navbar";
 import HeroSection from "./pages/HeroSection";
@@ -8,7 +8,7 @@ import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
 import ReviewSection from "./pages/Reviews";
 import AboutUs from "./pages/AboutUs";
-
+import ServiceDetailPage from "./pages/ServiceDetailPage";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 
@@ -39,20 +39,22 @@ function App() {
       <div className="min-h-screen flex flex-col font-sans">
         <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <HeroSection />
-                <ServicesSection onAddToCart={handleAddToCart} />
-                <ReviewSection />
-              </>
-            }
-          />
-          <Route path="/about" element={<AboutUs />} />
-        </Routes>
-
+        <main className="flex-grow">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <HeroSection />
+                  <ServicesSection onAddToCart={handleAddToCart} />
+                  <ReviewSection />
+                </>
+              }
+            />
+            <Route path="/about-us" element={ <AboutUs />} />
+            <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
+          </Routes>
+        </main>
         <CartModal
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}

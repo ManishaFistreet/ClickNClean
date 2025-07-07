@@ -30,12 +30,12 @@ const testimonials: Testimonial[] = [
 
 const ReviewSection: React.FC = () => {
   return (
-    <div className="py-12 bg-white text-center">
+    <div className="py-12 text-center">
       <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
         What Our Customer Say
       </h2>
       <div className="w-20 h-1 bg-yellow-400 mx-auto mt-2 mb-10 rounded" />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-10 mb-10">
         {testimonials.map((item, index) => (
           <div
             key={index}
