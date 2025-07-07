@@ -39,3 +39,13 @@ export const fetchPrices = async () => {
     return [];
   }
 };
+
+export const fetchReviews = async () => {
+  try{
+    const res = await api.get("/reviews");
+    return res.data;
+  } catch(error) {
+    console.error("Error fetching Reviews", error);
+    return [];
+  }
+};

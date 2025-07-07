@@ -48,11 +48,11 @@ const Footer = () => {
             <div>
               <h3 className="font-semibold text-black mb-3">Contact Us</h3>
               <p className="text-sm text-gray-700">
-                Office: jodhpur<br />
+                Office: Jodhpur<br />
                 Jodhpur-Rajasthan <br />
                 Email:{" "}
                 <a href="mailto:hello@yourdomain.tld" className="underline">
-                  clicknclick.gmail.com
+                  clicknclick@gmail.com
                 </a>
               </p>
               <div className="flex items-center space-x-3 mt-4">
