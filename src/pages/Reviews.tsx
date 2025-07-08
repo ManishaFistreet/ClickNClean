@@ -30,7 +30,7 @@ const testimonials: Testimonial[] = [
 
 const ReviewSection: React.FC = () => {
   return (
-    <div className="py-12 text-center">
+    <div className=" pb-12 text-center">
       <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
         What Our Customer Say
       </h2>

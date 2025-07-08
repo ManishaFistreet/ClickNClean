@@ -11,10 +11,12 @@ import AboutUs from "./pages/AboutUs";
 import ServiceDetailPage from "./pages/ServiceDetailPage";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
+import MasterRoute from "./MasterRoute";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const masterRoute = location.pathname.startsWith('/master');
 
   const handleAddToCart = (item: CartItemBase) => {
     setCart((prev) => {
@@ -34,11 +36,13 @@ function App() {
     setCart((prev) => prev.filter((item) => item._id !== id));
   };
 
+
   return (
     <Router>
       <div className="min-h-screen flex flex-col font-sans">
-        <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
-
+        {
+          !masterRoute && <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
+        }
         <main className="flex-grow">
           <Routes>
             <Route
@@ -51,8 +55,9 @@ function App() {
                 </>
               }
             />
-            <Route path="/about-us" element={ <AboutUs />} />
+            <Route path="/about-us" element={<AboutUs />} />
             <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
+            <Route path="/master/*" element={<MasterRoute />} />
           </Routes>
         </main>
         <CartModal
@@ -61,8 +66,9 @@ function App() {
           cart={cart}
           onRemoveFromCart={handleRemoveFromCart}
         />
-
-        <Footer />
+        {
+          !masterRoute && <Footer />
+        }
       </div>
     </Router>
   );

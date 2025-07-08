@@ -1,4 +1,6 @@
 import axios from "axios";
+import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
+import type { ServiceShowcase } from "../types/services";
 
 const BASE_URL = "http://localhost:5000/api";
 
@@ -16,7 +18,7 @@ export const fetchServices = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching services:", error);
-    return []; 
+    return [];
   }
 };
 
@@ -50,3 +52,29 @@ export const fetchServiceById = async (id: string) => {
     throw error;
   }
 };
+
+export const fetchShowcase = async (): Promise<ServiceShowcase[]> => {
+  const res = await api.get("/showcase");
+  return res.data;
+};
+
+export const addShowcaseAd = async (payload: AddShowcasePayload) => {
+  try {
+    const res = await api.post("/showcase", payload);
+    return res.data;
+  } catch (error) {
+    console.error("Error in submitting advertisement", error);
+    throw error;
+  }
+};
+
+export const fetchAllUsers = async () => {
+  try {
+    const res = await api.get("/user/all");
+    return res.data;
+
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    return [];
+  }
+}

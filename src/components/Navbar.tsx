@@ -116,7 +116,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
           </div>
 
           <a href="#offers" className="hover:text-globalPrimary transition font-bold">Offers</a>
-          <Link to="/about" className="hover:text-globalPrimary font-bold">About</Link>
+          <Link to="/about-us" className="hover:text-globalPrimary font-bold">About</Link>
           <a href="#login" className="hover:text-globalPrimary transition flex items-center gap-1 font-bold">
             Log In <FaUserCircle className="text-xl" />
           </a>
