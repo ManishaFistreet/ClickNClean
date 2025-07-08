@@ -1,7 +1,8 @@
 import { ShoppingCart } from "lucide-react";
 import type { CartItem } from "../types/services";
 import Button from "../components/Button";
-import { close, deleted } from "../assets";
+import close from "../assets/icons/close.svg";
+import deleted from "../assets/icons/delete.svg"
 
 type Props = {
   isOpen: boolean;
