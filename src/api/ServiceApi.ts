@@ -2,7 +2,7 @@ import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
 import type { ServiceShowcase } from "../types/services";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://192.168.1.85:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -38,6 +38,16 @@ export const fetchPrices = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching prices:", error);
+    return [];
+  }
+};
+
+export const fetchReviews = async () => {
+  try {
+    const res = await api.get("/reviews");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching Reviews", error);
     return [];
   }
 };

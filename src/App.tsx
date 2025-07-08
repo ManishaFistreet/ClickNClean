@@ -4,7 +4,6 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./pages/HeroSection";
 import ServicesSection from "./pages/ServicesSection";
-import CartModal from "./pages/CartSection";
 import Footer from "./components/Footer";
 import ReviewSection from "./pages/Reviews";
 import AboutUs from "./pages/AboutUs";
@@ -60,7 +59,7 @@ function App() {
             <Route path="/master/*" element={<MasterRoute />} />
           </Routes>
         </main>
-        <CartModal
+         <CartDrawer
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
           cart={cart}
