@@ -11,6 +11,7 @@ import ServiceDetailPage from "./pages/ServiceDetailPage";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 import MasterRoute from "./MasterRoute";
+import CartDrawer from "./pages/CartSection";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
