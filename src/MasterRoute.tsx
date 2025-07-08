@@ -1,0 +1,60 @@
+// src/routes/MasterRoute.tsx
+import { Layout, ConfigProvider } from "antd";
+import { useState } from "react";
+import Dashboard from "./erp/Master/Dashboard";
+import CustomerList from "./erp/listings/CustomerListing";
+import AdvertisementList from "./erp/listings/AdvertisementList";
+import OrderBookingList from "./erp/listings/OrderBookingList";
+import AppSidebar from "./components/Sidebar";
+import DashboardHeader from "./components/DashboardMaster";
+
+const { Content } = Layout;
+
+export default function MasterRoute() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [activePageKey, setActivePageKey] = useState("1");
+ const userName = localStorage.getItem("userName") || "Guest";
+  const profilePicUrl = localStorage.getItem("profilePicUrl") || "";
+  const toggleSidebar = () => setCollapsed((prev) => !prev);
+
+  const renderMasterPage = () => {
+    switch (activePageKey) {
+      case "1": return <Dashboard />;
+    //   case "2": return <RequestPersonServiceList />;
+    //   case "3": return <RequestForm />;
+    //   case "4": return <ServiceList />;
+    //   case "5": return <PriceList />;
+    //   case "6": return <PackageList />;
+      case "7": return <CustomerList />;
+      case "8": return <AdvertisementList />;
+    //   case "9": return <CustomerLocationList />;
+    //   case "10": return <LogInLogsList />;
+      case "11": return <OrderBookingList />;
+      default: return <Dashboard />;
+    }
+  };
+
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            itemColor: "#197935",
+            itemSelectedColor: "#197935",
+            itemSelectedBg: "#ffffff",
+            itemHoverColor: "#ffffff",
+            itemHoverBg: "#02822b",
+          },
+        },
+      }}
+    >
+      <Layout style={{ minHeight: "100vh" }}>
+        <AppSidebar collapsed={collapsed} onSelect={setActivePageKey} />
+        <Layout>
+          <DashboardHeader  userName= {userName} profilePicUrl ={profilePicUrl} toggleSidebar={toggleSidebar} />
+          <Content style={{ margin: 16 }}>{renderMasterPage()}</Content>
+        </Layout>
+      </Layout>
+    </ConfigProvider>
+  );
+}

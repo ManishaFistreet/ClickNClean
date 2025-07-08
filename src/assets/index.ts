@@ -17,6 +17,18 @@ import leaf from "../assets/icons/leaf.svg"
 import globe from "../assets/icons/globe.svg"
 import deleted from "../assets/icons/delete.svg"
 import close from "../assets/icons/close.svg"
+import CustomerPlusIcon from "../assets/icons/customerplus.svg"
+import RequestServiceIcon from "../assets/icons/requestservice.svg"
+import Service from "../assets/icons/service.svg"
+import Price from "../assets/icons/price.svg"
+import Package from "../assets/icons/package.svg"
+import Customer from "../assets/icons/customers.svg"
+import Advertisement from "../assets/icons/Advertisement.svg"
+import Logs from "../assets/icons/customerplus.svg"
+import Orders from "../assets/icons/orders.svg"
+import Dashboard from "../assets/icons/dashboard.svg";
+import TipsYellow from "../assets/icons/tip-yellow.webp";
+import TipsGreen from "../assets/icons/tips-green-tone.jpg";
 export {
     emptycart,
     cover,
@@ -36,6 +48,18 @@ export {
     leaf,
     globe,
     deleted,
-    close
+    close,
     
+    CustomerPlusIcon,
+    RequestServiceIcon,
+    Service,
+    Price,
+    Package,
+    Customer,
+    Advertisement,
+    Logs,
+    Orders,
+    Dashboard,
+    TipsYellow,
+    TipsGreen
 };

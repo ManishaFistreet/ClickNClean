@@ -69,8 +69,8 @@ export type ServiceShowcase = {
   adActiveStatus: boolean;
   showcaseStartTime: string;
   showcaseEndTime: string;
-  showcaseStartDate: Date;
-  showcaseEndDate: Date;
+  showcaseStartDate: string;
+  showcaseEndDate: string;
   adPriceId: string;
 };
 
@@ -97,3 +97,41 @@ export type CartItemBase = {
 export type CartItem = CartItemBase & {
   quantity: number;
 };
+
+export interface User {
+  _id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  isVerified?: boolean;
+  profilePhoto?: string;
+  createdAt?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    coordinates?: {
+      lat?: number;
+      lng?: number;
+    };
+  };
+}
+
+export interface OrderBookingFormValues {
+  uniqueId: string;
+  bookingId: string;
+  serviceCategory?: string;
+  serviceCode?: string;
+  offerCode?: string;
+  packageCode?: string;
+  priceType?: string;
+  finalDiscount?: string;
+  taxableValue?: string;
+  totalValueIncTax?: string;
+  totalValuePerService?: string;
+  gstValue?: string;
+  gstPercent?: string;
+  grandTotal?: string;
+}
