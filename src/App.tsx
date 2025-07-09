@@ -57,10 +57,10 @@ function App() {
             />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
-            <Route path="/master/*" element={<MasterRoute />} />
+            <Route path="/master" element={<MasterRoute />} />
           </Routes>
         </main>
-         <CartDrawer
+        <CartDrawer
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
           cart={cart}
