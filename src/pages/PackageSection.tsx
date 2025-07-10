@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { fetchPackages } from "../api/ServiceApi";
-import { packages as packagesBg } from "../assets";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

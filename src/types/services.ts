@@ -42,6 +42,16 @@ export type ServicePrice = {
   pkgUniqueId: string;
 };
 
+export type SubService = {
+  _id: string;
+  name: string;
+  parentService: string;
+  image?: string;
+  price: number;
+  duration?: string;
+  description?: string;
+};
+
 export type PackageService = {
   _id: string;
   uniqueId: string;
@@ -90,7 +100,7 @@ export type CartItemBase = {
   price: number;
   image?: string;
   icon?: string;
-  type: 'service' | 'package';
+  type?: 'service' | 'package';
   includedServices?: ServiceMaster[];
 };
 
@@ -134,4 +144,24 @@ export interface OrderBookingFormValues {
   gstValue?: string;
   gstPercent?: string;
   grandTotal?: string;
+}
+
+export interface Coupon {
+  _id?: string;
+  code: string;
+  discountType: "percentage" | "fixed";
+  discountValue: number;
+  maxDiscount?: number | null;
+  minOrderValue?: number;
+  usageLimit?: number | null;
+  perUserLimit?: number | null;
+  usedBy?: {
+    userId: string;
+    usedCount: number;
+  }[];
+  validFrom: string;
+  validUntil: string;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

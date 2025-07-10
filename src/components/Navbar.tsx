@@ -5,6 +5,7 @@ import { fetchServices } from "../api/ServiceApi";
 import { Link } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import WelcomeModal from "./WelcomeModal";
+import Button from "./Button";
 
 type NavbarProps = {
   cartCount: number;
@@ -16,7 +17,9 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
   const [categories, setCategories] = useState<Record<string, EnhancedService[]>>({});
   const [hoveredServiceImage, setHoveredServiceImage] = useState<string | null>(null);
   const [isMegaMenuOpen, setMegaMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(() => {
+    return localStorage.getItem("selectedCategory") || null;
+  });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -27,7 +30,6 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
   useEffect(() => {
     fetchServices()
       .then((res) => {
-        console.log("Response for service menu", res);
         const grouped = res.reduce((acc: Record<string, EnhancedService[]>, service: EnhancedService) => {
           const category = service.serviceCategory || "Others";
           if (!acc[category]) acc[category] = [];
@@ -43,12 +45,21 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
     ? { [selectedCategory]: categories[selectedCategory] }
     : {};
 
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+    localStorage.setItem("selectedCategory", category);
+  };
+
+  const handleChangeCategory = () => {
+    setSelectedCategory(null)
+  }
+
   return (
     <>
       {!selectedCategory && (
         <WelcomeModal
           categories={Object.keys(categories)}
-          onSelectCategory={(category) => setSelectedCategory(category)}
+          onSelectCategory={handleSelectCategory}
         />
       )}
       <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-globalWhiteTexture"}`}>
@@ -60,8 +71,8 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
 
           {/* Center - Nav Links */}
           <nav className="hidden md:flex gap-6 text-gray-800 font-medium mx-auto">
-            <a href="/" className="hover:text-globalPrimary transition font-bold">Home</a>
-            <a href="#plans" className="hover:text-globalPrimary transition font-bold">Plans</a>
+            <Link to ="/" className="hover:text-globalPrimary transition font-bold">Home</Link>
+            <Link to ="#plans" className="hover:text-globalPrimary transition font-bold">Plans</Link>
 
             {/* Services Hover Mega Menu */}
             <div
@@ -79,7 +90,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
               {isMegaMenuOpen && selectedCategory && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-[1000px] bg-white border rounded-xl shadow-xl p-6 z-50 flex gap-6">
                   {/* LEFT: Categories & Services */}
-                  <div className="w-2/3 grid grid-cols-3 gap-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+                  <div className="w-2/3 grid grid-cols-2 gap-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
                     {Object.entries(filteredCategories).map(([category, services]) => (
                       <div key={category}>
                         <h4 className="text-lg font-semibold text-globalPrimary mb-3">{category}</h4>
@@ -101,7 +112,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                               </li>) : null
                           ))}
                         </ul>
-
+                        <Button variant="default" className="mt-6" onClick={handleChangeCategory}>Change Service Category</Button>
                       </div>
                     ))}
                   </div>
@@ -112,7 +123,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                       <img
                         src={hoveredServiceImage}
                         alt="Preview"
-                        className="w-full h-auto max-h-64 object-contain rounded"
+                        className="w-full h-full max-h-64 object-contain rounded"
                         onError={(e) =>
                           ((e.target as HTMLImageElement).src = "/default-service.jpg")
                         }
