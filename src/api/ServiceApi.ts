@@ -1,11 +1,11 @@
 import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
-import type { ServiceShowcase } from "../types/services";
+import type { PriceFormValues, ServiceShowcase } from "../types/services";
 import  type {OrderBookingFormValues} from "../types/services"
 import type { LoginLog } from "../types/services";
 
 
-const BASE_URL = "http://192.168.1.58:5000/api";
+const BASE_URL = "http://192.168.1.63:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -43,6 +43,10 @@ export const fetchPrices = async () => {
     console.error("Error fetching prices:", error);
     return [];
   }
+};
+export const addPrice = async (data: PriceFormValues): Promise<void> => {
+  const response = await api.post('/service-price', data);
+  return response.data;
 };
 
 export const fetchReviews = async () => {

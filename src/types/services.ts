@@ -176,3 +176,27 @@ export interface ServicePersonFormValues {
   categories: string;
   dateTime: Dayjs;
 }
+export interface PriceFormValues {
+  serviceCode: string;
+  pkgUniqueId?: string;
+  uniqueId?: string;
+
+  minDiscount?: string;
+  maxDiscount?: string;
+  specialDiscount?: string;
+
+  priceType?: boolean;
+  showoffPrice?: string;
+  priceActiveStatus?: boolean;
+
+  offerDiscount?: string;
+  offerCode?: string;
+  actualPrice?: string;
+
+  offerStart?: Dayjs;
+  offerEnd?: Dayjs;
+
+  minPersonRequired?: string;
+  proportionalChargesExtraHours?: string;
+  proportionalExtraHours?: string;
+}

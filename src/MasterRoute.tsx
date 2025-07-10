@@ -14,6 +14,7 @@ import PriceList from "./erp/listings/PriceList";
 import ServiceMasterList from "./erp/listings/ServiceListing";
 import ServicePersonList from "./erp/listings/ServicePersonListing";
 import RequestForm from "./erp/Master/RequestForm";
+import AddUserAndServicePersonForm from "./erp/Master/AddUserAndServicePerson";
 
 const { Content } = Layout;
 
@@ -36,6 +37,7 @@ export default function MasterRoute() {
       case "8": return <AdvertisementList />;
        case "9": return <LogInLogsList />;
       case "10": return <OrderBookingList />;
+      case "11": return <AddUserAndServicePersonForm/>;
       default: return <Dashboard />;
     }
   };
