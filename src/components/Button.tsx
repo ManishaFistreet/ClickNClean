@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'default';
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,6 +15,12 @@ const Button: React.FC<ButtonProps> = ({
     'font-poppins text-md font-semibold px-4 py-2 rounded-lg transition-all duration-300';
 
   const variants = {
+    default: classNames(
+      'bg-globalPrimary',
+      'text-white',
+      'rounded-lg shadow-md hover:shadow-lg',
+      'shadow-sm hover:shadow-2xl'
+    ),
     primary: classNames(
       'bg-[linear-gradient(165deg,#B6D73E,#88b448)]',
       'text-globalSecondary',
@@ -26,7 +32,7 @@ const Button: React.FC<ButtonProps> = ({
       'bg-globalAccent',
       'text-white',
       'rounded-lg shadow-md hover:shadow-lg',
-      'hover:globalOliveLight'
+      'hover:bg-globalOliveLight'
     ),
     outline: classNames(
       'border border-globalPrimary',

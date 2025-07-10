@@ -4,13 +4,14 @@ import { X } from "../assets";
 import { instagram } from "../assets";
 import Rating from '@mui/material/Rating';
 import { Link } from "react-router-dom";
+import Button from "./Button";
 const Footer = () => {
-    const [value, setValue] = React.useState<number | null>(); 
+  const [value, setValue] = React.useState<number | null>();
   return (
     <>
       <footer className="w-full bg-[#2a4f3e] pt-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-t-2xl shadow-md px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="mt-6 bg-white rounded-t-2xl shadow-md px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3">
               ✨
               <h1 className="text-xl font-bold text-green-700">
@@ -85,19 +86,19 @@ const Footer = () => {
             <div>
               <h3 className="font-semibold text-black mb-3">Give your Rating & Review</h3>
               <Rating
-        name="simple-controlled"
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        style={{marginLeft:'35px',marginBottom:''}}/>
-              <div style={{marginLeft:'40px'}}>
-                <button
-                  type="submit"
-                  className="bg-gradient-to-r from-lime-400 to-lime-600 text-white text-base px-6 py-3 rounded-md shadow-md hover:opacity-90 transition">
-                  Submit
-                </button>
-              </div>
+                name="simple-controlled"
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+              />
+              <Button
+                type="submit"
+                variant="default"
+              >
+                Rate our services
+              </Button>
+
             </div>
           </div>
 

@@ -1,103 +1,184 @@
+import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import type { CartItem } from "../types/services";
-import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 import close from "../assets/icons/close.svg";
-import deleted from "../assets/icons/delete.svg"
+import deleted from "../assets/icons/delete.svg";
+import { fetchCouponCode } from "../api/ServiceApi";
+import type { Coupon } from "../types/services";
+import Button from "../components/Button";
+
+type CartItem = {
+  _id: string;
+  name: string;
+  image?: string;
+  price: number;
+  quantity: number;
+};
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
   cart: CartItem[];
   onRemoveFromCart: (id: string) => void;
 };
 
-const CartDrawer = ({ isOpen, onClose, cart, onRemoveFromCart }: Props) => {
+const CartPage = ({ cart, onRemoveFromCart }: Props) => {
+  const navigate = useNavigate();
+
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const [couponCode, setCouponCode] = useState("");
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+
+  useEffect(() => {
+    fetchCouponCode().then(setCoupons);
+  }, []);
+
+  const handleApplyCoupon = () => {
+    const matched = coupons.find(
+      (c) => c.code.toLowerCase() === couponCode.toLowerCase()
+    );
+    if (matched) {
+      setAppliedCoupon(matched);
+    } else {
+      alert("Invalid coupon code");
+    }
+  };
+
+  const discount = appliedCoupon
+    ? appliedCoupon.discountType === "percentage"
+      ? (total * appliedCoupon.discountValue) / 100
+      : appliedCoupon.discountValue
+    : 0;
+
+  const finalTotal = total - discount;
 
   return (
-    <>
-      {/* Overlay below navbar */}
-      <div
-        className={`fixed left-0 right-0 bottom-0 top-[80px] bg-black bg-opacity-40 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-        onClick={onClose}
-      ></div>
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold flex items-center gap-2 text-[#37755C]">
+          <ShoppingCart className="w-5 h-5" />
+          Your Cart
+        </h2>
+        <img
+          src={close}
+          alt="Close"
+          className="cursor-pointer"
+          style={{ width: 30, height: 30 }}
+          onClick={() => navigate(-1)}
+        />
+      </div>
 
-      {/* Drawer from top */}
-      <div
-        className={`fixed right-0 top-[80px] h-[calc(100%-80px)] w-full max-w-md bg-white z-50 shadow-xl transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="p-6 border-b flex justify-between items-center">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-primary-700">
-              <ShoppingCart className="w-5 h-5" />
-              Your Cart
-            </h2>
-            <img src={close}
-              onClick={onClose}
-              className="text-sm text-gray-500 hover:text-gray-800"
-            style={{height:'30px', width:'30px', cursor:'pointer'}}
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Cart Table */}
+        <div className="w-full lg:w-2/3">
+          <table className="w-full text-sm border">
+            <thead>
+              <tr className="border-b text-left text-gray-700 font-semibold">
+                <th className="py-2 px-2">Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-4 text-center text-gray-500">
+                    Your cart is empty.
+                  </td>
+                </tr>
+              ) : (
+                cart.map((item) => (
+                  <tr key={item._id} className="border-b">
+                    <td className="py-3 px-2 flex items-center gap-3">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-14 h-14 object-contain"
+                      />
+                      <span className="font-medium">{item.name}</span>
+                    </td>
+                    <td className="text-gray-700">₹{item.price.toFixed(2)}</td>
+                    <td>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        readOnly
+                        className="w-12 border rounded text-center"
+                      />
+                    </td>
+                    <td className="text-gray-800 font-semibold">
+                      ₹{(item.price * item.quantity).toFixed(2)}
+                    </td>
+                    <td>
+                      <img
+                        src={deleted}
+                        alt="delete"
+                        onClick={() => onRemoveFromCart(item._id)}
+                        className="w-4 h-4 cursor-pointer"
+                      />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Summary Section */}
+        <div className="w-full lg:w-1/3 bg-gray-50 p-6 border rounded-md space-y-6">
+          <div>
+            <h4 className="text-lg font-semibold mb-2">Coupon Code</h4>
+            <p className="text-sm text-gray-600 mb-2">
+              {appliedCoupon
+                ? `Applied: ${appliedCoupon.code} (${appliedCoupon.discountType === "percentage"
+                  ? appliedCoupon.discountValue + "% off"
+                  : "₹" + appliedCoupon.discountValue + " off"
+                })`
+                : "Enter your coupon code below"}
+            </p>
+            <input
+              type="text"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              placeholder="Enter Coupon Code"
+              className="w-full border px-3 py-2 rounded text-sm mb-3"
             />
+            <Button
+              onClick={handleApplyCoupon}
+              className="w-full bg-[#173958] hover:bg-[#173958]/90 text-white text-sm"
+            >
+              APPLY COUPON
+            </Button>
           </div>
 
-          {/* Scrollable Cart Content */}
-          <div className="flex-grow overflow-y-auto p-6 space-y-4">
-            {cart.length === 0 ? (
-              <p className="text-gray-700 text-md">Your cart is empty.</p>
-            ) : (
-              cart.map((item, index) => (
-                <div
-                  key={item._id}
-                  className={`flex justify-between items-center pb-2 ${index !== cart.length - 1 ? "border-b" : ""
-                    }`}
-                >
-                  <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-gray-500">
-                      ₹{item.price} x {item.quantity}
-                    </p>
-                  </div>
-                  
-                  <img src={deleted} 
-                    onClick={() => onRemoveFromCart(item._id)}
-                    style={{width:'20px',height:'20px', cursor:'pointer', color:'red'}}
-                  />
-                  
-                
-                </div>
-              ))
-            )}
-          </div>
+          <div className="text-sm space-y-2 border-t pt-4">
+            <div className="flex justify-between">
+              <span>Cart Subtotal:</span>
+              <span>₹{total.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Discount:</span>
+              <span>- ₹{discount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-semibold text-base">
+              <span>Cart Total:</span>
+              <span>₹{finalTotal.toFixed(2)}</span>
+            </div>
 
-          {/* Total + Checkout + OR + Add More (sticky bottom) */}
-          {cart.length > 0 && (
-            <div className="border-t p-6">
-              <div className="text-right font-bold text-lg text-primary-700 mb-4">
-                Total: ₹{total}
-              </div>
-              <Button variant="secondary" className="w-full">
+            <div className="flex gap-2 mt-4">
+              <Button variant="outline"  onClick={()=>navigate('/')}>
+                Add more
+              </Button>
+              <Button variant="outline" >
                 Checkout
               </Button>
-
-              {/* OR Divider */}
-              <div className="inline-flex items-center justify-center w-full my-6 relative">
-                <hr className="w-64 h-px bg-gray-200 border-0 dark:bg-gray-700" />
-                <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">
-                  OR
-                </span>
-              </div>
-
-              <Button variant="secondary" className="w-full">
-                Add More Service
-              </Button>
             </div>
-          )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default CartDrawer;
+export default CartPage;

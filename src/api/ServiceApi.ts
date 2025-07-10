@@ -4,8 +4,7 @@ import type { ServiceShowcase } from "../types/services";
 import  type {OrderBookingFormValues} from "../types/services"
 import type { LoginLog } from "../types/services";
 
-
-const BASE_URL = "http://192.168.1.58:5000/api";
+const BASE_URL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -58,7 +57,6 @@ export const fetchReviews = async () => {
 export const fetchServiceById = async (id: string) => {
   try {
     const res = await api.get(`/service-master/${id}`);
-    console.log(res)
     return res.data;
   } catch (error) {
     console.error("Error fetching service:", error);
@@ -118,3 +116,36 @@ export const addServices = async (formData: FormData): Promise<any> => {
   });
   return res.data;
 };
+
+export const fetchCouponCode = async () => {
+  try {
+    const res = await api.get("/coupons/list");
+    return res.data;
+
+  } catch (error) {
+    console.error("Error fetching coupons:", error);
+    return [];
+  }
+}
+
+export const fetchSubServices = async (serviceId: string) => {
+  try {
+    const res = await api.get("/sub-services", {
+      params: { serviceId },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching sub-services", error);
+    return [];
+  }
+};
+
+export const fetchCoupons = async () => {
+  try {
+    const res = await api.get("/coupons");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching sub-services", error);
+    throw error;
+  }
+}

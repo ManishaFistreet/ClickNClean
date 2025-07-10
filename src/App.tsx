@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import Navbar from "./components/Navbar";
@@ -11,12 +11,13 @@ import ServiceDetailPage from "./pages/ServiceDetailPage";
 import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 import MasterRoute from "./MasterRoute";
-import CartDrawer from "./pages/CartSection";
+import CartPage from "./pages/CartSection";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const masterRoute = location.pathname.startsWith('/master');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const masterRoute = location.pathname.startsWith("/master");
 
   const handleAddToCart = (item: CartItemBase) => {
     setCart((prev) => {
@@ -29,48 +30,44 @@ function App() {
         return [...prev, { ...item, quantity: 1 }];
       }
     });
-    setIsCartOpen(true);
+    navigate("/cart");
   };
 
   const handleRemoveFromCart = (id: string) => {
     setCart((prev) => prev.filter((item) => item._id !== id));
   };
 
-
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col font-sans">
-        {
-          !masterRoute && <Navbar cartCount={cart.length} onCartClick={() => setIsCartOpen(true)} />
-        }
-        <main className="flex-grow">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <HeroSection />
-                  <ServicesSection onAddToCart={handleAddToCart} />
-                  <ReviewSection />
-                </>
-              }
-            />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
-            <Route path="/master" element={<MasterRoute />} />
-          </Routes>
-        </main>
-        <CartDrawer
-          isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
-          cart={cart}
-          onRemoveFromCart={handleRemoveFromCart}
-        />
-        {
-          !masterRoute && <Footer />
-        }
-      </div>
-    </Router>
+    <div className="min-h-screen flex flex-col font-sans">
+      {!masterRoute && (
+        <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
+      )}
+      <main className="flex-grow">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <HeroSection />
+                <ServicesSection onAddToCart={handleAddToCart} />
+                <ReviewSection />
+              </>
+            }
+          />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route
+            path="/service/:serviceId"
+            element={<ServiceDetailPage onAddToCart={handleAddToCart} />}
+          />
+          <Route path="/master/*" element={<MasterRoute />} />
+          <Route
+            path="/cart"
+            element={<CartPage cart={cart} onRemoveFromCart={handleRemoveFromCart} />}
+          />
+        </Routes>
+      </main>
+      {!masterRoute && <Footer />}
+    </div>
   );
 }
 
