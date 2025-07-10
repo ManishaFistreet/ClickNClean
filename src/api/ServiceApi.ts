@@ -1,8 +1,11 @@
 import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
 import type { ServiceShowcase } from "../types/services";
+import  type {OrderBookingFormValues} from "../types/services"
+import type { LoginLog } from "../types/services";
 
-const BASE_URL = "http://localhost:5000/api";
+
+const BASE_URL = "http://192.168.1.58:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -38,6 +41,16 @@ export const fetchPrices = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching prices:", error);
+    return [];
+  }
+};
+
+export const fetchReviews = async () => {
+  try {
+    const res = await api.get("/reviews");
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching Reviews", error);
     return [];
   }
 };
@@ -78,3 +91,30 @@ export const fetchAllUsers = async () => {
     return [];
   }
 }
+export const fetchOrderBooking = async (): Promise<OrderBookingFormValues[]> => {
+  const res = await api.get("/bookings");
+  return res.data;
+};
+
+export const fetchLoginLogs = async (): Promise<LoginLog[]> => {
+  try{
+  const response = await api.get("/loginlogs");
+  return response.data;
+} catch(error){
+  console.error("Error fetching LoginListing:", error);
+  return[];
+}
+}
+
+export const createLoginLog = async (data: LoginLog): Promise<void> => {
+  await api.post("/loginlogs", data);
+};
+
+export const addServices = async (formData: FormData): Promise<any> => {
+  const res = await api.post("/service-master", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export type ServiceMaster = {
   _id: string;
   serviceCode: string;
@@ -121,17 +123,56 @@ export interface User {
 
 export interface OrderBookingFormValues {
   uniqueId: string;
-  bookingId: string;
-  serviceCategory?: string;
-  serviceCode?: string;
-  offerCode?: string;
-  packageCode?: string;
-  priceType?: string;
-  finalDiscount?: string;
-  taxableValue?: string;
-  totalValueIncTax?: string;
-  totalValuePerService?: string;
-  gstValue?: string;
-  gstPercent?: string;
-  grandTotal?: string;
+  booking_id: string;
+  service_category: string;
+  service_code: string;
+  offer_code: string;
+  package_code: string;
+  price_type: string;
+  final_discount: string;
+  taxable_value: string;
+  total_value: string;
+  total_value_per_service: string;
+  gst_per_service: string;
+  gst_per_service_pert: string;
+  grandTotal: string;
+}
+
+export interface PackageData {
+  UniqueId: string;
+  packageName: string;
+  packageDetail: string;
+  mappedServiceCode: string;
+  packagePriceId: string;
+  mappedPriceMaster: string;
+}
+
+export interface LoginLog {
+  uniqueId: string;
+  ipAddress: string;
+  loginDate: string; 
+  loginTime: string;
+  loginLatitude: string;
+  loginLongitude: string;
+  loggedInBy: 'app' | 'web';
+  loginAddress: string;
+}
+
+export interface ServicePersonFormValues {
+  name: string;
+  phone: string;
+  email: string;
+  profilephoto?: {
+    uid: string;
+    name: string;
+    status: string;
+    url?: string;
+    originFileObj?: File;
+  }[];
+  city: string;
+  state: string;
+  street: string;
+  zipCode: string;
+  categories: string;
+  dateTime: Dayjs;
 }
