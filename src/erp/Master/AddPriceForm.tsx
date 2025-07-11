@@ -3,7 +3,7 @@ import {
   Form,
   Input,
   DatePicker,
-  Button,
+  Button as AntButton,
   Typography,
   Select,
   Row,
@@ -13,6 +13,7 @@ import {
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { addPrice, fetchServices } from "../../api/ServiceApi";
 import type { PriceFormValues, ServiceMaster } from "../../types/services";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -62,9 +63,9 @@ const AddPriceForm: React.FC<AddPriceFormProps> = ({ onBack, onSuccess }) => {
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add New Price
         </Title>
@@ -177,10 +178,10 @@ const AddPriceForm: React.FC<AddPriceFormProps> = ({ onBack, onSuccess }) => {
           </Row>
 
           <Form.Item style={{ marginTop: 16 }}>
-            <Button htmlType="submit"  style={{ fontWeight: 500, padding: "6px 24px" }}>
+            <Button  variant="secondary" style={{ fontWeight: 500, padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
+            <Button variant="outline" onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>

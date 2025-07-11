@@ -3,7 +3,7 @@ import {
   Form,
   Input,
   Upload,
-  Button,
+  Button as AntButton,
   Row,
   Col,
   Typography,
@@ -13,6 +13,7 @@ import {
 import { UploadOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 import type { UploadFile } from "antd/es/upload/interface";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -85,9 +86,9 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add New Package
         </Title>
@@ -111,7 +112,7 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
                 getValueFromEvent={normFile}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload Web Image</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload Web Image</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -149,7 +150,7 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
                 getValueFromEvent={normFile}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload App Image</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload App Image</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -204,10 +205,10 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
 
           {/* Buttons */}
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-            <Button type="primary" htmlType="submit" style={{ padding: "6px 24px" }}>
+            <Button variant="secondary" style={{ padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
+            <Button variant="outline" onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>

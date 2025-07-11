@@ -147,7 +147,7 @@ const PriceList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+   <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
       {!showPriceForm ? (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px' }}>
@@ -167,7 +167,7 @@ const PriceList: React.FC = () => {
                     <TableCell
                       key={column.id}
                       align={column.align ?? 'left'}
-                      style={{ minWidth: column.minWidth, backgroundColor: '#C3C3C3' }}
+                      style={{ minWidth: column.minWidth ,   backgroundColor: "#E0E0E0",}}
                     >
                       {column.label}
                     </TableCell>

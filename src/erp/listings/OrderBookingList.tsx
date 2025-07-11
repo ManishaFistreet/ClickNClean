@@ -135,7 +135,7 @@ const OrderBookingList: React.FC = () => {
   };
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
       {showForm ? (
         <AddOrderBookingForm
           onBack={() => setShowForm(false)}
@@ -164,11 +164,11 @@ const OrderBookingList: React.FC = () => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align} style={{ background: '#E0E0E0' }}>
+                    <TableCell key={column.id} align={column.align} style={{ backgroundColor: "#E0E0E0" }} >
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell align="center" style={{ background: '#E0E0E0' }}>Actions</TableCell>
+                  <TableCell align="center" style={{ backgroundColor: "#E0E0E0" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -213,24 +213,24 @@ const OrderBookingList: React.FC = () => {
         title="Invoice Preview"
         footer={[
           <Button key="cancel" onClick={() => setInvoiceVisible(false)}>Cancel</Button>,
-          <Button key="print"  onClick={handleDownloadPDF}>Download PDF</Button>,
+          <Button key="print" onClick={handleDownloadPDF}>Download PDF</Button>,
         ]}
         width={800}
       >
         <div id="invoiceContent" style={{ padding: 40, backgroundColor: '#fff', fontFamily: 'Arial' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
-  <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <svg width="220" height="50" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stopColor="#88b448" />
-      <stop offset="100%" stopColor="#34735b" />
-    </linearGradient>
-  </defs>
-  <text x="0" y="35" fontSize="32" fontWeight="bold" fontFamily="Arial" fill="url(#logoGradient)">
-    ClickNClean
-  </text>
-</svg>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <svg width="220" height="50" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#88b448" />
+                    <stop offset="100%" stopColor="#34735b" />
+                  </linearGradient>
+                </defs>
+                <text x="0" y="35" fontSize="32" fontWeight="bold" fontFamily="Arial" fill="url(#logoGradient)">
+                  ClickNClean
+                </text>
+              </svg>
               <div style={{ fontWeight: 'bold', fontSize: 16 }}>Jodhpur</div>
             </div>
             <div style={{ textAlign: 'right' }}>
@@ -248,8 +248,8 @@ const OrderBookingList: React.FC = () => {
             </div>
             <div style={{ textAlign: 'right' }}>
               <div><strong>Invoice Date:</strong>{currentDate}</div>
-                <div><strong>Invoice Time:</strong>{currentTime}</div>
-                </div>
+              <div><strong>Invoice Time:</strong>{currentTime}</div>
+            </div>
           </div>
 
           <div><strong>Place Of Supply:</strong> Jodhpur,Rajasthan</div>

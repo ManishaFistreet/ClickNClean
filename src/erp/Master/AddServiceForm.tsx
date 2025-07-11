@@ -3,7 +3,7 @@ import {
   Form,
   Input,
   Select,
-  Button,
+  Button as AntButton,
   Row,
   Col,
   Typography,
@@ -16,6 +16,7 @@ import CreatableSelect from "react-select/creatable";
 import type { SingleValue } from "react-select";
 import { addServices } from "../../api/ServiceApi";
 import type { ServiceMaster } from "../../types/services";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 
@@ -76,9 +77,9 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add New Service
         </Title>
@@ -96,7 +97,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -206,7 +207,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -296,10 +297,10 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
           </Row>
 
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-            <Button htmlType="submit" type="primary" style={{ fontWeight: 500, padding: "6px 24px" }}>
+            <Button variant="secondary" style={{ fontWeight: 500, padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
+            <Button variant="outline" onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>

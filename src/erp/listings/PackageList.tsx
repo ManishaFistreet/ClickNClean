@@ -14,7 +14,7 @@ import { createStyles } from 'antd-style';
 
 import type { PackageData } from '../../types/services';
 import AddPackageForm from '../Master/AddPackageForm';
-import { fetchPackages } from '../../api/ServiceApi'; // ✅ use your API function
+import { fetchPackages } from '../../api/ServiceApi'; 
 
 interface Column {
   id: keyof PackageData;
@@ -65,8 +65,7 @@ const PackageList: React.FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
 
   const { styles } = useStyle();
-
-  // ✅ use API function to fetch package data
+  
   useEffect(() => {
     const loadPackages = async () => {
       try {
@@ -117,7 +116,7 @@ const PackageList: React.FC = () => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth,backgroundColor: "#E0E0E0", }}>
                       {column.label}
                     </TableCell>
                   ))}

@@ -3,7 +3,6 @@ import {
     Form,
     Input,
     DatePicker,
-    Button,
     Row,
     Col,
     Typography,
@@ -11,6 +10,7 @@ import {
     Select,
 } from "antd";
 import dayjs from 'dayjs';
+import Button from '../../components/Button';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -127,10 +127,11 @@ const RequestForm: React.FC = () => {
                     </Row>
 
                     <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-                        <Button  htmlType="submit" style={{ padding: "6px 24px" }}>
+                        <Button variant='secondary' style={{ padding: "6px 24px" }}>
                             Submit
                         </Button>
                         <Button
+                        variant="outline"
                             onClick={() => form.resetFields()}
                             style={{ marginLeft: 12, padding: "6px 24px" }}
                         >

@@ -69,7 +69,7 @@ export default function CustomerList() {
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0",}}
                   align={column.align || 'left'}
                 >
                   {column.label}
