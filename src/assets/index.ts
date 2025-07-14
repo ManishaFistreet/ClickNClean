@@ -27,6 +27,7 @@ import Orders from "../assets/icons/orders.svg"
 import Dashboard from "../assets/icons/dashboard.svg";
 import TipsYellow from "../assets/icons/tip-yellow.webp";
 import TipsGreen from "../assets/icons/tips-green-tone.jpg";
+
 export {
     emptycart,
     cover,

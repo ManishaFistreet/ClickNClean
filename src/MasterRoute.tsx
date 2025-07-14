@@ -7,6 +7,13 @@ import AdvertisementList from "./erp/listings/AdvertisementList";
 import OrderBookingList from "./erp/listings/OrderBookingList";
 import AppSidebar from "./components/Sidebar";
 import DashboardHeader from "./components/DashboardMaster";
+import PackageList from "./erp/listings/PackageList";
+import LogInLogsList from "./erp/listings/LogINLogList";
+import PriceList from "./erp/listings/PriceList";
+
+import ServiceMasterList from "./erp/listings/ServiceListing";
+import ServicePersonList from "./erp/listings/ServicePersonListing";
+import RequestForm from "./erp/Master/RequestForm";
 
 const { Content } = Layout;
 
@@ -20,19 +27,20 @@ export default function MasterRoute() {
   const renderMasterPage = () => {
     switch (activePageKey) {
       case "1": return <Dashboard />;
-    //   case "2": return <RequestPersonServiceList />;
-    //   case "3": return <RequestForm />;
-    //   case "4": return <ServiceList />;
-    //   case "5": return <PriceList />;
-    //   case "6": return <PackageList />;
+       case "2": return <ServicePersonList />;
+      case "3": return <RequestForm />;
+      case "4": return <ServiceMasterList/>;
+      case "5": return <PriceList />;
+      case "6": return <PackageList />;
       case "7": return <CustomerList />;
       case "8": return <AdvertisementList />;
-    //   case "9": return <CustomerLocationList />;
-    //   case "10": return <LogInLogsList />;
-      case "11": return <OrderBookingList />;
+       case "9": return <LogInLogsList />;
+      case "10": return <OrderBookingList />;
       default: return <Dashboard />;
     }
   };
+
+  console.log("Active page key --",activePageKey);
 
   return (
     <ConfigProvider
