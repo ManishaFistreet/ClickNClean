@@ -87,9 +87,9 @@ const LoginLogList: React.FC = () => {
     try {
       const res = await fetchLoginLogs();
       setLogs(res);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load login logs');
-      console.error(err);
+    } catch (error) {
+      setError('Failed to load login logs');
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ const LoginLogList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
         <h3 style={{ margin: 0 }}>Login Logs</h3>
         {!showForm && (
@@ -142,8 +142,7 @@ const LoginLogList: React.FC = () => {
                       align={column.align}
                       style={{
                         minWidth: column.minWidth,
-                        backgroundColor: '#F5F5F5',
-                        fontWeight: 'bold',
+                        backgroundColor: "#E0E0E0",
                       }}
                     >
                       {column.label}

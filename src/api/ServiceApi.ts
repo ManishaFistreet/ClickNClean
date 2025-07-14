@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
-import type { Booking, BookingPayload, Coupon, ServiceShowcase, User } from "../types/services";
+import type { PriceFormValues, Booking, BookingPayload, Coupon, ServiceShowcase, User } from "../types/services";
 import  type {OrderBookingFormValues} from "../types/services"
 import type { LoginLog } from "../types/services";
 
@@ -71,6 +71,10 @@ export const fetchPrices = async () => {
     console.error("Error fetching prices:", error);
     return [];
   }
+};
+export const addPrice = async (data: PriceFormValues): Promise<void> => {
+  const response = await api.post('/service-price', data);
+  return response.data;
 };
 
 export const fetchReviews = async () => {

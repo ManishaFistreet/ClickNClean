@@ -4,7 +4,7 @@ import {
   Input,
   DatePicker,
   TimePicker,
-  Button,
+  Button as AntButton,
   Row,
   Col,
   Typography,
@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import type { Dayjs } from "dayjs";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -63,9 +64,9 @@ const AddLoginLogsForm: React.FC<AddLoginLogsFormProps> = ({ onBack, onSuccess }
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add Login Log Info
         </Title>
@@ -153,10 +154,10 @@ const AddLoginLogsForm: React.FC<AddLoginLogsFormProps> = ({ onBack, onSuccess }
           </Row>
 
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-            <Button type="primary" htmlType="submit" style={{ padding: "6px 24px" }}>
+            <Button variant="secondary" style={{ padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
+            <Button  variant="outline" onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>

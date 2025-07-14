@@ -3,7 +3,7 @@ import {
   Form,
   Input,
   Select,
-  Button,
+  Button as AntButton,
   Row,
   Col,
   Typography,
@@ -13,11 +13,17 @@ import {
 import { UploadOutlined, ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
 import CreatableSelect from "react-select/creatable";
-import type { SingleValue } from "react-select";
 import { addServices } from "../../api/ServiceApi";
 import type { ServiceMaster } from "../../types/services";
+import Button from "../../components/Button";
+import type { SingleValue, FormatOptionLabelMeta } from "react-select";
 
 const { Title } = Typography;
+
+type CategoryOption = {
+  value: string;
+  label: string;
+};
 
 type serviceFormValues = Omit<ServiceMaster, "_id"> & {
   serviceWebImage: UploadFile[];
@@ -32,12 +38,12 @@ interface AddServiceFormProps {
 const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) => {
   const [form] = Form.useForm<serviceFormValues>();
 
-  const defaultCategories = [
+  const defaultCategories: CategoryOption[] = [
     { value: "Residential Cleaning", label: "Residential Cleaning" },
     { value: "Commercial Cleaning", label: "Commercial Cleaning" },
   ];
 
-  const [categoryOptions, setCategoryOptions] = useState(defaultCategories);
+  const [categoryOptions, setCategoryOptions] = useState<CategoryOption[]>(defaultCategories);
 
   const handleAdd = async (values: serviceFormValues) => {
     const formData = new FormData();
@@ -76,9 +82,9 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add New Service
         </Title>
@@ -96,7 +102,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -122,13 +128,9 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                     <CreatableSelect
                       isClearable
                       options={categoryOptions}
-                      onChange={(
-                        newValue: SingleValue<{ value: string; label: string }>
-                      ) => {
+                      onChange={(newValue: SingleValue<CategoryOption>) => {
                         if (newValue) {
-                          const exists = categoryOptions.find(
-                            (opt) => opt.value === newValue.value
-                          );
+                          const exists = categoryOptions.find((opt) => opt.value === newValue.value);
                           if (!exists) {
                             setCategoryOptions((prev) => [...prev, newValue]);
                           }
@@ -137,23 +139,20 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                           form.setFieldsValue({ serviceCategory: undefined });
                         }
                       }}
+
                       onCreateOption={(inputValue: string) => {
-                        const newOption = { value: inputValue, label: inputValue };
+                        const newOption: CategoryOption = { value: inputValue, label: inputValue };
                         setCategoryOptions((prev) => [...prev, newOption]);
                         form.setFieldsValue({ serviceCategory: inputValue });
                       }}
-                      formatOptionLabel={(data: any, { context }: any) => {
-                        const isDefault = defaultCategories.some(
-                          (d) => d.value === data.value
-                        );
-                        return context === "menu" ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          >
+
+                      formatOptionLabel={(
+                        data: CategoryOption,
+                        meta: FormatOptionLabelMeta<CategoryOption>
+                      ) => {
+                        const isDefault = defaultCategories.some((d) => d.value === data.value);
+                        return meta.context === "menu" ? (
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span>{data.label}</span>
                             {!isDefault && (
                               <CloseOutlined
@@ -162,12 +161,8 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                                   setCategoryOptions((prev) =>
                                     prev.filter((option) => option.value !== data.value)
                                   );
-                                  if (
-                                    form.getFieldValue("serviceCategory") === data.value
-                                  ) {
-                                    form.setFieldsValue({
-                                      serviceCategory: undefined,
-                                    });
+                                  if (form.getFieldValue("serviceCategory") === data.value) {
+                                    form.setFieldsValue({ serviceCategory: undefined });
                                   }
                                 }}
                                 style={{
@@ -183,6 +178,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                           data.label
                         );
                       }}
+
                     />
                   );
                 }}
@@ -206,7 +202,7 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -296,10 +292,10 @@ const AddServiceForm: React.FC<AddServiceFormProps> = ({ onBack, onSuccess }) =>
           </Row>
 
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-            <Button htmlType="submit" type="primary" style={{ fontWeight: 500, padding: "6px 24px" }}>
+            <Button variant="secondary" style={{ fontWeight: 500, padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
+            <Button variant="outline" onClick={onBack} style={{ marginLeft: 12, fontWeight: 500, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>

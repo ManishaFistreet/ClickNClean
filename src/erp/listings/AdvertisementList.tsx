@@ -94,7 +94,7 @@ const AdvertisementList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: 20 }}>
         <h3>Advertisement Listing</h3>
         <ConfigProvider button={{ className: styles.linearGradientButton }}>

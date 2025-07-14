@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Form,
   Input,
   Select,
@@ -8,9 +7,11 @@ import {
   Row,
   Col,
   message,
+  Button as AntButton
 } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import type { OrderBookingFormValues } from "../../types/services";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -47,9 +48,9 @@ const AddOrderBookingForm: React.FC<AddOrderBookingFormProps> = ({
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add Order & Booking
         </Title>
@@ -170,14 +171,15 @@ const AddOrderBookingForm: React.FC<AddOrderBookingFormProps> = ({
 
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
             <Button
-              type="primary"
-              htmlType="submit"
+              variant="secondary"
+              
               style={{ padding: "6px 24px" }}
             >
               Submit
             </Button>
             <Button
               onClick={onBack}
+              variant="outline"
               style={{ marginLeft: 12, padding: "6px 24px" }}
             >
               Cancel

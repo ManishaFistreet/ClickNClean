@@ -3,7 +3,6 @@ import {
     Form,
     Input,
     DatePicker,
-    Button,
     Row,
     Col,
     Typography,
@@ -11,14 +10,23 @@ import {
     Select,
 } from "antd";
 import dayjs from 'dayjs';
+import Button from '../../components/Button';
 
 const { Title } = Typography;
 const { Option } = Select;
 
+interface RequestFormValues {
+    name: string;
+    email: string;
+    serviceCategory: 'residential' | 'commercial';
+    address: string;
+    phone: string;
+    date: dayjs.Dayjs;
+}
 const RequestForm: React.FC = () => {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<RequestFormValues>();
 
-    const handleFinish = (values: any) => {
+    const handleFinish = (values: RequestFormValues) => {
         const payload = {
             ...values,
             date: values.date ? values.date.format('YYYY-MM-DD HH:mm') : null,
@@ -127,10 +135,11 @@ const RequestForm: React.FC = () => {
                     </Row>
 
                     <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-                        <Button  htmlType="submit" style={{ padding: "6px 24px" }}>
+                        <Button variant='secondary' style={{ padding: "6px 24px" }}>
                             Submit
                         </Button>
                         <Button
+                            variant="outline"
                             onClick={() => form.resetFields()}
                             style={{ marginLeft: 12, padding: "6px 24px" }}
                         >

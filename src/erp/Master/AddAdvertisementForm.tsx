@@ -5,7 +5,7 @@ import {
   DatePicker,
   TimePicker,
   Upload,
-  Button,
+  Button as AntButton,
   Row,
   Col,
   Typography,
@@ -17,6 +17,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 import { Dayjs } from "dayjs";
 import type { ServiceShowcase } from "../../types/services";
 import { addShowcaseAd } from "../../api/ServiceApi";
+import Button from "../../components/Button";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -86,9 +87,9 @@ const handleFinish = async (values: FormValues) => {
           alignItems: "center",
         }}
       >
-        <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
+        <AntButton icon={<ArrowLeftOutlined />} onClick={onBack} style={{ fontWeight: 500 }}>
           Back
-        </Button>
+        </AntButton>
         <Title level={4} style={{ margin: 0 }}>
           Add New Advertisement
         </Title>
@@ -107,7 +108,7 @@ const handleFinish = async (values: FormValues) => {
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -139,7 +140,7 @@ const handleFinish = async (values: FormValues) => {
                 getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
               >
                 <Upload listType="picture" beforeUpload={() => false}>
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                  <AntButton icon={<UploadOutlined />}>Upload</AntButton>
                 </Upload>
               </Form.Item>
             </Col>
@@ -195,10 +196,10 @@ const handleFinish = async (values: FormValues) => {
           </Row>
 
           <Form.Item style={{ textAlign: "left", marginTop: 16 }}>
-            <Button type="primary" htmlType="submit" style={{ padding: "6px 24px" }}>
+            <Button variant="secondary"style={{ padding: "6px 24px" }}>
               Submit
             </Button>
-            <Button onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
+            <Button  variant="outline" onClick={onBack} style={{ marginLeft: 12, padding: "6px 24px" }}>
               Cancel
             </Button>
           </Form.Item>
