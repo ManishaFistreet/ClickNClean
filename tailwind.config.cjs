@@ -36,6 +36,11 @@ module.exports = {
         globalOliveLight: " #DEEDA8",
         globalWhiteTexture: " #F8FBEC",
         globalCreamish: " #FFFFFF",
+        gray: {
+          100: "	#808080",
+          200: " #A0A0A0",
+          300: " #C0C0C0"
+        }
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],

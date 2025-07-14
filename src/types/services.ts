@@ -44,6 +44,16 @@ export type ServicePrice = {
   pkgUniqueId: string;
 };
 
+export type SubService = {
+  _id: string;
+  name: string;
+  parentService: string;
+  image?: string;
+  price: number;
+  duration?: string;
+  description?: string;
+};
+
 export type PackageService = {
   _id: string;
   uniqueId: string;
@@ -92,7 +102,7 @@ export type CartItemBase = {
   price: number;
   image?: string;
   icon?: string;
-  type: 'service' | 'package';
+  type?: 'service' | 'package';
   includedServices?: ServiceMaster[];
 };
 
@@ -101,7 +111,7 @@ export type CartItem = CartItemBase & {
 };
 
 export interface User {
-  _id: string;
+  id: string;
   name?: string;
   email?: string;
   phone?: string;
@@ -150,7 +160,7 @@ export interface PackageData {
 export interface LoginLog {
   uniqueId: string;
   ipAddress: string;
-  loginDate: string; 
+  loginDate: string;
   loginTime: string;
   loginLatitude: string;
   loginLongitude: string;
@@ -199,4 +209,76 @@ export interface PriceFormValues {
   minPersonRequired?: string;
   proportionalChargesExtraHours?: string;
   proportionalExtraHours?: string;
+}
+
+export interface Coupon {
+  _id?: string;
+  code: string;
+  discountType: "percentage" | "fixed";
+  discountValue: number;
+  maxDiscount?: number | null;
+  minOrderValue?: number;
+  usageLimit?: number | null;
+  perUserLimit?: number | null;
+  usedBy?: {
+    userId: string;
+    usedCount: number;
+  }[];
+  validFrom: string;
+  validUntil: string;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BookingPayload {
+  userId: string;
+  services: {
+    serviceId: string;
+    quantity: number;
+  }[];
+  schedule: {
+    date: string;
+    time: string;
+  };
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  couponCode: string | null;
+}
+
+export interface BookingService {
+  serviceId: string;
+  serviceCode: string;
+  quantity: number;
+  price: number;
+  gstPercentage: number;
+  gstAmount: number;
+  totalWithGst: number;
+}
+
+export interface Booking {
+  _id: string;
+  user: string;
+  services: BookingService[];
+  schedule: {
+    date: string;
+    time: string;
+  };
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  paymentStatus: "pending" | "paid";
+  subtotal: number;
+  gstTotal: number;
+  grandTotal: number;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
 }

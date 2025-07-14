@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type {
-  CartItemBase,
   EnhancedPackage,
   EnhancedService,
   PackageService,
@@ -13,7 +12,12 @@ import { fetchPackages, fetchPrices, fetchServices } from '../api/ServiceApi';
 import Slider from 'react-slick';
 
 type Props = {
-  onAddToCart: (item: CartItemBase) => void;
+  onAddToCart: (item: {
+    _id: string;
+    name: string;
+    price: number;
+    image: string;
+  }) => void;
 };
 
 const ServicesSection = ({ onAddToCart }: Props) => {
@@ -116,26 +120,35 @@ const ServicesSection = ({ onAddToCart }: Props) => {
 
   return (
     <section className="py-10 px-4 max-w-7xl mx-auto">
-
-      {/* All Services (Flat List) */}
       <div className="mb-20">
         <h1 className='text-md font-bold text-black text-center'>WHAT WE OFFER</h1>
         <h2 className="text-xl font-bold text-globalPrimary text-center mb-10">
           A cleaning service that’s professional and affordable
         </h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <ServiceCard
-              key={service._id}
-              service={service}
-              index={index}
-              onAddToCart={onAddToCart}
-            />
-          ))}
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+          {services
+            .filter(service => {
+              const selectedCategory = localStorage.getItem("selectedCategory");
+              return selectedCategory ? service.serviceCategory === selectedCategory : true;
+            })
+            .map((service, index) => (
+              <ServiceCard
+                key={service._id}
+                service={service}
+                index={index}
+                onAddToCart={() =>
+                  onAddToCart({
+                    _id: service._id,
+                    name: service.serviceName,
+                    price: service.currentActivePrice,
+                    image: service.serviceWebImage || "/default-service.jpg",
+                  })
+                }
+              />
+            ))}
         </div>
       </div>
 
-      {/* Featured Packages Section */}
       {packages.length > 0 && (
         <div className="mb-16">
           <div className="flex items-center justify-center mb-10">
@@ -148,14 +161,26 @@ const ServicesSection = ({ onAddToCart }: Props) => {
 
           <div className="relative px-4">
             <Slider
-              {...settings} // Your existing slick settings
+              {...settings}
               className="custom-slick-slider"
             >
               {packages.map((pkg) => (
                 <div key={pkg._id} className="px-3">
-                  <PackageCard pkg={pkg} onAddToCart={onAddToCart} />
+                  <PackageCard
+                    pkg={pkg}
+                    onAddToCart={() =>
+                      onAddToCart({
+                        _id: pkg._id,
+                        name: pkg.packageName,
+                        price: pkg.packagePrice,
+                        image:
+                          pkg.includedServices?.[0]?.serviceWebImage || "/default-service.jpg",
+                      })
+                    }
+                  />
                 </div>
               ))}
+
             </Slider>
           </div>
         </div>
