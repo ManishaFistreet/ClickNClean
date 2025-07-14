@@ -15,6 +15,8 @@ import { createStyles } from 'antd-style';
 import { fetchPrices } from '../../api/ServiceApi';
 import AddPriceForm from '../Master/AddPriceForm';
 import type { PriceFormValues } from '../../types/services';
+import type { Column } from './PackageList';
+import { Dayjs } from 'dayjs';
 
 const useStyle = createStyles(({ prefixCls, css }) => ({
   linearGradientButton: css`
@@ -38,22 +40,22 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
   `,
 }));
 
-const columns: {
-  id: keyof PriceFormValues;
-  label: string;
-  minWidth?: number;
-  align?: 'right' | 'left' | 'center';
-  format?: (value: any) => string;
-}[] = [
+const columns: Column<PriceFormValues>[] = [
   {
     id: 'serviceCode',
     label: 'Service Code',
     minWidth: 120,
     format: (value) => {
       if (typeof value === 'string') return value;
-      if (value && typeof value === 'object') return value.code || value.serviceCode || '[Invalid]';
-      return '-';
-    },
+      if (typeof value === 'object' && value !== null) {
+        return (
+          (value as { code?: string; serviceCode?: string }).code ||
+          (value as { serviceCode?: string }).serviceCode ||
+          '[Invalid]'
+        );
+      }
+      return '[Invalid]';
+    }
   },
   {
     id: 'actualPrice',
@@ -96,18 +98,18 @@ const columns: {
     label: 'Offer Start',
     minWidth: 120,
     format: (value) =>
-      value && typeof value.format === 'function'
-        ? value.format('DD-MM-YYYY')
-        : new Date(value).toLocaleDateString('en-IN'),
+      typeof value === 'object' && value !== null && 'format' in value
+        ? (value as Dayjs).format('DD-MM-YYYY')
+        : new Date(value as string | number | Date).toLocaleDateString('en-IN'),
   },
   {
     id: 'offerEnd',
     label: 'Offer End',
     minWidth: 120,
     format: (value) =>
-      value && typeof value.format === 'function'
-        ? value.format('DD-MM-YYYY')
-        : new Date(value).toLocaleDateString('en-IN'),
+      typeof value === 'object' && value !== null && 'format' in value
+        ? (value as Dayjs).format('DD-MM-YYYY')
+        : new Date(value as string | number | Date).toLocaleDateString('en-IN'),
   },
 ];
 
@@ -125,9 +127,15 @@ const PriceList: React.FC = () => {
       try {
         const data = await fetchPrices();
         setPrices(data);
-      } catch (err: any) {
-        setError(err.message || 'Error fetching prices');
-      } finally {
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Failed to fetch packages');
+        }
+        setLoading(false);
+      }
+      finally {
         setLoading(false);
       }
     };
@@ -147,7 +155,7 @@ const PriceList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-   <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
       {!showPriceForm ? (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px' }}>
@@ -167,7 +175,7 @@ const PriceList: React.FC = () => {
                     <TableCell
                       key={column.id}
                       align={column.align ?? 'left'}
-                      style={{ minWidth: column.minWidth ,   backgroundColor: "#E0E0E0",}}
+                      style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0", }}
                     >
                       {column.label}
                     </TableCell>

@@ -69,7 +69,7 @@ export default function CustomerList() {
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0",}}
+                  style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0", }}
                   align={column.align || 'left'}
                 >
                   {column.label}
@@ -81,7 +81,7 @@ export default function CustomerList() {
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <TableRow hover key={row._id}>
+                <TableRow hover key={row.id}>
                   {columns.map((column) => {
                     let value: string | number | undefined | Date;
 
@@ -110,13 +110,13 @@ export default function CustomerList() {
                     return (
                       <TableCell key={column.id} align={column.align || 'left'}>
                         {column.format &&
-                        (typeof value === 'string' ||
-                          typeof value === 'number' ||
-                          value instanceof Date)
+                          (typeof value === 'string' ||
+                            typeof value === 'number' ||
+                            value instanceof Date)
                           ? column.format(value)
                           : typeof value === 'object' || typeof value === 'undefined'
-                          ? '-'
-                          : value}
+                            ? '-'
+                            : value}
                       </TableCell>
                     );
                   })}

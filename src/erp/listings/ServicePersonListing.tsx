@@ -11,35 +11,10 @@ import {
   Avatar,
 } from "@mui/material";
 import { Select, Tabs, Tag } from "antd";
-import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-
-const useStyle = createStyles(({ prefixCls, css }) => ({
-  linearGradientButton: css`
-    &.${prefixCls}-btn-primary:not([disabled]):not(.${prefixCls}-btn-dangerous) {
-      > span {
-        position: relative;
-      }
-
-      &::before {
-        content: '';
-        background: linear-gradient(135deg, rgb(188, 226, 127), #BCE27F);
-        position: absolute;
-        inset: -1px;
-        opacity: 1;
-        transition: all 0.3s;
-        border-radius: inherit;
-      }
-
-      &:hover::before {
-        opacity: 0;
-      }
-    }
-  `,
-}));
 
 interface ServicePerson {
   name: string;
@@ -143,7 +118,6 @@ const columns = [
 ];
 
 const ServicePersonList: React.FC = () => {
-  const { styles } = useStyle();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState<"active" | "pending">("active");

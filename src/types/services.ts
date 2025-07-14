@@ -151,10 +151,10 @@ export interface OrderBookingFormValues {
 export interface PackageData {
   UniqueId: string;
   packageName: string;
-  packageDetail: string;
+  packageDetail?: string;
   mappedServiceCode: string;
   packagePriceId: string;
-  mappedPriceMaster: string;
+  mappedPriceMaster?: string;
 }
 
 export interface LoginLog {

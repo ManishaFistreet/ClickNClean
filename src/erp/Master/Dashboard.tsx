@@ -3,6 +3,13 @@ import Chart from 'react-apexcharts';
 import { Table, Card, Avatar } from 'antd';
 import { LuCircleCheck, LuCircleX } from 'react-icons/lu';
 
+interface Holiday {
+  name: string;
+  date: {
+    iso: string;
+  };
+}
+
 interface BookedService {
   key: number;
   service: string;
@@ -22,7 +29,7 @@ interface LeaveRequest {
 }
 
 const Dashboard: React.FC = () => {
-  const [holidays, setHolidays] = useState<any[]>([]);
+  const [holidays, setHolidays] = useState<Holiday[]>([]);
   const [pendingLeaves, setPendingLeaves] = useState<LeaveRequest[]>([
     {
       id: 1,
@@ -47,24 +54,26 @@ const Dashboard: React.FC = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        const allHolidays = data?.response?.holidays || [];
+        const allHolidays: Holiday[] = data?.response?.holidays || [];
         const today = new Date();
-        const upcomingHolidays = allHolidays
-          .filter((holiday: any) => {
+
+        const upcomingHolidays: Holiday[] = allHolidays
+          .filter((holiday) => {
             const iso = holiday?.date?.iso;
             if (!iso) return false;
             const holidayDate = new Date(iso);
             return !isNaN(holidayDate.getTime()) && holidayDate >= today;
           })
           .sort(
-            (a: any, b: any) =>
-              new Date(a.date.iso).getTime() -
-              new Date(b.date.iso).getTime()
+            (a, b) =>
+              new Date(a.date.iso).getTime() - new Date(b.date.iso).getTime()
           );
+
         setHolidays(upcomingHolidays);
       })
       .catch((error) => console.error('Failed to fetch holidays:', error));
   }, []);
+
 
   const getDayName = (dateString: string): string => {
     const date = new Date(dateString);
@@ -76,7 +85,7 @@ const Dashboard: React.FC = () => {
   const chartOptions = {
     chart: { id: 'completed-services-overview', toolbar: { show: false } },
     xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-    stroke: { curve: 'smooth' },
+    stroke: { curve: 'smooth' as const },
     colors: ['#6366f1'],
   };
 

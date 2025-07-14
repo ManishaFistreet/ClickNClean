@@ -14,17 +14,17 @@ import { createStyles } from 'antd-style';
 
 import type { PackageData } from '../../types/services';
 import AddPackageForm from '../Master/AddPackageForm';
-import { fetchPackages } from '../../api/ServiceApi'; 
+import { fetchPackages } from '../../api/ServiceApi';
 
-interface Column {
-  id: keyof PackageData;
+export interface Column<T> {
+  id: keyof T;
   label: string;
   minWidth?: number;
   align?: 'right' | 'left' | 'center';
-  format?: (value: any) => string;
+  format?: (value: T[keyof T]) => string;
 }
 
-const columns: Column[] = [
+const columns: Column<PackageData>[] = [
   { id: 'packageName', label: 'Package Name', minWidth: 150 },
   { id: 'packageDetail', label: 'Details', minWidth: 200 },
   { id: 'mappedServiceCode', label: 'Service Code', minWidth: 130 },
@@ -55,7 +55,6 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
     }
   `,
 }));
-
 const PackageList: React.FC = () => {
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -65,15 +64,19 @@ const PackageList: React.FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
 
   const { styles } = useStyle();
-  
+
   useEffect(() => {
     const loadPackages = async () => {
       try {
         const data = await fetchPackages();
         setPackages(data);
         setLoading(false);
-      } catch (err: any) {
-        setError(err.message || 'Failed to fetch packages');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Failed to fetch packages');
+        }
         setLoading(false);
       }
     };
@@ -116,7 +119,7 @@ const PackageList: React.FC = () => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth,backgroundColor: "#E0E0E0", }}>
+                    <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0", }}>
                       {column.label}
                     </TableCell>
                   ))}

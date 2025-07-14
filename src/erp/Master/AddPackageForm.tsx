@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { UploadOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
+import type { UploadChangeParam } from 'antd/es/upload';
 import type { UploadFile } from "antd/es/upload/interface";
 import Button from "../../components/Button";
 
@@ -69,7 +70,7 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
     }
   };
 
-  const normFile = (e: any): UploadFile[] => {
+  const normFile = (e: UploadChangeParam): UploadFile[] => {
     return Array.isArray(e) ? e : e?.fileList;
   };
 

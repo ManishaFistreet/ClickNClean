@@ -88,7 +88,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
               </span>
 
               {isMegaMenuOpen && selectedCategory && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[1000px] bg-white border rounded-xl shadow-xl p-6 z-50 flex gap-6">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[1000px] bg-white border-none rounded-xl shadow-xl p-6 z-50 flex gap-6">
                   {/* LEFT: Categories & Services */}
                   <div className="w-2/3 grid grid-cols-2 gap-6 max-h-[400px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
                     {Object.entries(filteredCategories).map(([category, services]) => (
