@@ -1,8 +1,13 @@
 import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
-import type { ServiceShowcase } from "../types/services";
+import type { Booking, BookingPayload, Coupon, ServiceShowcase, User } from "../types/services";
 import  type {OrderBookingFormValues} from "../types/services"
 import type { LoginLog } from "../types/services";
+
+interface GetMyBookingsResponse {
+  success: boolean;
+  bookings: Booking[];
+}
 
 const BASE_URL = "http://localhost:5000/api";
 
@@ -13,6 +18,30 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const sendOtpApi = async (phone: string) => {
+  const res = await api.post("/user/send-otp", { phone });
+  return res.data;
+};
+
+export const verifyOtpApi = async (phone: string, otp: string) => {
+  const res = await api.post("/user/verify-otp", { phone, otp });
+  return res.data;
+};
+
+export const registerUserApi = async (data: {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  role: string;
+}) => {
+  const res = await api.post<{ success: boolean; user: User; token: string }>(
+    "/user/register",
+    data
+  );
+  return res.data;
+};
 
 export const fetchServices = async () => {
   try {
@@ -108,7 +137,7 @@ export const createLoginLog = async (data: LoginLog): Promise<void> => {
   await api.post("/loginlogs", data);
 };
 
-export const addServices = async (formData: FormData): Promise<any> => {
+export const addServices = async (formData: FormData): Promise<void> => {
   const res = await api.post("/service-master", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -116,17 +145,6 @@ export const addServices = async (formData: FormData): Promise<any> => {
   });
   return res.data;
 };
-
-export const fetchCouponCode = async () => {
-  try {
-    const res = await api.get("/coupons/list");
-    return res.data;
-
-  } catch (error) {
-    console.error("Error fetching coupons:", error);
-    return [];
-  }
-}
 
 export const fetchSubServices = async (serviceId: string) => {
   try {
@@ -140,12 +158,64 @@ export const fetchSubServices = async (serviceId: string) => {
   }
 };
 
-export const fetchCoupons = async () => {
+export const fetchCoupons = async (cartValue: number) => {
   try {
-    const res = await api.get("/coupons");
-    return res.data;
+    const res = await api.get("/coupons/list");
+     return res.data.filter(
+      (coupon: Coupon) => !coupon.minOrderValue || coupon.minOrderValue <= cartValue
+    );
   } catch (error) {
     console.error("Error fetching sub-services", error);
     throw error;
   }
 }
+
+export const createBooking = async (data: BookingPayload): Promise<{ success: boolean; message?: string }> => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.post("/bookings/create", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return {
+      success: false,
+      message: "Failed to create booking",
+    };
+  }
+};
+
+export const getMyBookings = async (userId: string): Promise<GetMyBookingsResponse> => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.get(`/bookings/my-bookings/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data as GetMyBookingsResponse;
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    return {
+      success: false,
+      bookings: [],
+    };
+  }
+};
+
+
+export const cancelBooking = async (bookingId: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.put(`/bookings/cancel/${bookingId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Cancel booking error:", error);
+    return { success: false, message: "Failed to cancel booking" };
+  }
+};

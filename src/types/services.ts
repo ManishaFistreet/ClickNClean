@@ -111,7 +111,7 @@ export type CartItem = CartItemBase & {
 };
 
 export interface User {
-  _id: string;
+  id: string;
   name?: string;
   email?: string;
   phone?: string;
@@ -160,7 +160,7 @@ export interface PackageData {
 export interface LoginLog {
   uniqueId: string;
   ipAddress: string;
-  loginDate: string; 
+  loginDate: string;
   loginTime: string;
   loginLatitude: string;
   loginLongitude: string;
@@ -205,4 +205,56 @@ export interface Coupon {
   isActive: boolean;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface BookingPayload {
+  userId: string;
+  services: {
+    serviceId: string;
+    quantity: number;
+  }[];
+  schedule: {
+    date: string;
+    time: string;
+  };
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  couponCode: string | null;
+}
+
+export interface BookingService {
+  serviceId: string;
+  serviceCode: string;
+  quantity: number;
+  price: number;
+  gstPercentage: number;
+  gstAmount: number;
+  totalWithGst: number;
+}
+
+export interface Booking {
+  _id: string;
+  user: string;
+  services: BookingService[];
+  schedule: {
+    date: string;
+    time: string;
+  };
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  paymentStatus: "pending" | "paid";
+  subtotal: number;
+  gstTotal: number;
+  grandTotal: number;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
 }

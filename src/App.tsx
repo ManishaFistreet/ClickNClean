@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import Navbar from "./components/Navbar";
 import HeroSection from "./pages/HeroSection";
@@ -8,16 +8,27 @@ import Footer from "./components/Footer";
 import ReviewSection from "./pages/Reviews";
 import AboutUs from "./pages/AboutUs";
 import ServiceDetailPage from "./pages/ServiceDetailPage";
-import './App.css';
 import type { CartItem, CartItemBase } from "./types/services";
 import MasterRoute from "./MasterRoute";
 import CartPage from "./pages/CartSection";
+import MyOrders from "./pages/MyOrders";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const masterRoute = location.pathname.startsWith("/master");
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const handleAddToCart = (item: CartItemBase) => {
     setCart((prev) => {
@@ -64,6 +75,8 @@ function App() {
             path="/cart"
             element={<CartPage cart={cart} onRemoveFromCart={handleRemoveFromCart} />}
           />
+          <Route path="/my-bookings"
+            element={<MyOrders />} />
         </Routes>
       </main>
       {!masterRoute && <Footer />}
