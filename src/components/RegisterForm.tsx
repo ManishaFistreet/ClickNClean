@@ -38,10 +38,12 @@ const RegisterForm = ({ phone, onSuccess }: RegisterFormProps) => {
         localStorage.setItem("token", token);
         onSuccess(user, token);
       }
-    } catch (err) {
-      console.error("Register error", err);
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Failed to fetch packages');
+      }
       setLoading(false);
     }
   };

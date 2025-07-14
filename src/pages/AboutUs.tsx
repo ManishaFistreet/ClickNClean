@@ -1,4 +1,3 @@
-import React from "react";
 import { aboutbg, c_office, globe, leaf, user } from "../assets";
 import { happy } from "../assets";
 import { keeping } from "../assets";
