@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// src/erp/listings/PriceList.tsx
+import React, { useEffect, useState } from 'react';
 import {
   Paper,
   Table,
@@ -8,113 +9,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-} from "@mui/material";
-import { Button, ConfigProvider } from "antd";
-import { createStyles } from "antd-style";
-import { fetchPrices } from "../../api/ServiceApi";
-
-import type { ServicePrice } from "../../types/services";
-import AddPriceForm from "../Master/AddPriceForm";
-
-interface Column<T = ServicePrice> {
-  id: keyof T;
-  label: string;
-  minWidth?: number;
-  align?: "right" | "left" | "center";
-  format?: (value: T[keyof T]) => string;
-}
-
-const columns: Column[] = [
-  { id: "serviceCode", label: "Service Code", minWidth: 120 },
-  { id: "pkgUniqueId", label: "Package ID", minWidth: 100 },
-  { id: "uniqueId", label: "Unique ID", minWidth: 100 },
-  {
-    id: "actualPrice",
-    label: "Price",
-    minWidth: 100,
-    align: "right",
-    format: (value) => `₹${value}`,
-  },
-  {
-    id: "showoffPrice",
-    label: "Showoff Price",
-    minWidth: 120,
-    align: "right",
-  },
-  {
-    id: "offerDiscount",
-    label: "Offer Discount (%)",
-    minWidth: 120,
-    align: "right",
-  },
-  {
-    id: "minDiscount",
-    label: "Min Discount (%)",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "maxDiscount",
-    label: "Max Discount (%)",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "specialDiscount",
-    label: "Special Discount (%)",
-    minWidth: 130,
-    align: "right",
-  },
-  {
-    id: "offerCode",
-    label: "Offer Code",
-    minWidth: 120,
-  },
-  {
-    id: "priceType",
-    label: "Price Type",
-    minWidth: 100,
-    format: (value) => (value ? "Fixed" : "Hourly"),
-  },
-  {
-    id: "priceActiveStatus",
-    label: "Status",
-    minWidth: 100,
-    format: (value) => (value ? "Active" : "Inactive"),
-  },
-  {
-    id: "offerStart",
-    label: "Offer Start",
-    minWidth: 120,
-    format: (value) =>
-      value ? new Date(value as string | Date).toLocaleDateString("en-IN") : "-",
-  },
-  {
-    id: "offerEnd",
-    label: "Offer End",
-    minWidth: 120,
-    format: (value) =>
-      value ? new Date(value as string | Date).toLocaleDateString("en-IN") : "-",
-  },
-  {
-    id: "minPersonRequired",
-    label: "Staff",
-    minWidth: 80,
-    align: "right",
-  },
-  {
-    id: "proportionalChargesExtraHours",
-    label: "Extra Hour Charge",
-    minWidth: 150,
-    align: "right",
-  },
-  {
-    id: "proportionalExtraHours",
-    label: "Proportional Hours",
-    minWidth: 150,
-    align: "right",
-  },
-];
+} from '@mui/material';
+import { Button, ConfigProvider } from 'antd';
+import { createStyles } from 'antd-style';
+import { fetchPrices } from '../../api/ServiceApi';
+import AddPriceForm from '../Master/AddPriceForm';
+import type { PriceFormValues } from '../../types/services';
 
 const useStyle = createStyles(({ prefixCls, css }) => ({
   linearGradientButton: css`
@@ -122,17 +22,15 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
       > span {
         position: relative;
       }
-
       &::before {
         content: '';
-        background: linear-gradient(135deg, rgb(188, 226, 127), #BCE27F);
+        background: linear-gradient(135deg, rgb(188, 226, 127), #bce27f);
         position: absolute;
         inset: -1px;
         opacity: 1;
         transition: all 0.3s;
         border-radius: inherit;
       }
-
       &:hover::before {
         opacity: 0;
       }
@@ -140,30 +38,103 @@ const useStyle = createStyles(({ prefixCls, css }) => ({
   `,
 }));
 
+const columns: {
+  id: keyof PriceFormValues;
+  label: string;
+  minWidth?: number;
+  align?: 'right' | 'left' | 'center';
+  format?: (value: any) => string;
+}[] = [
+  {
+    id: 'serviceCode',
+    label: 'Service Code',
+    minWidth: 120,
+    format: (value) => {
+      if (typeof value === 'string') return value;
+      if (value && typeof value === 'object') return value.code || value.serviceCode || '[Invalid]';
+      return '-';
+    },
+  },
+  {
+    id: 'actualPrice',
+    label: 'Price',
+    minWidth: 100,
+    align: 'right',
+    format: (value) => `₹${value}`,
+  },
+  {
+    id: 'showoffPrice',
+    label: 'Showoff Price',
+    minWidth: 120,
+    align: 'right',
+  },
+  {
+    id: 'offerDiscount',
+    label: 'Offer Discount (%)',
+    minWidth: 120,
+    align: 'center',
+  },
+  {
+    id: 'offerCode',
+    label: 'Offer Code',
+    minWidth: 120,
+  },
+  {
+    id: 'priceType',
+    label: 'Price Type',
+    minWidth: 100,
+    format: (value) => (value ? 'Fixed' : 'Hourly'),
+  },
+  {
+    id: 'priceActiveStatus',
+    label: 'Status',
+    minWidth: 100,
+    format: (value) => (value ? 'Active' : 'Inactive'),
+  },
+  {
+    id: 'offerStart',
+    label: 'Offer Start',
+    minWidth: 120,
+    format: (value) =>
+      value && typeof value.format === 'function'
+        ? value.format('DD-MM-YYYY')
+        : new Date(value).toLocaleDateString('en-IN'),
+  },
+  {
+    id: 'offerEnd',
+    label: 'Offer End',
+    minWidth: 120,
+    format: (value) =>
+      value && typeof value.format === 'function'
+        ? value.format('DD-MM-YYYY')
+        : new Date(value).toLocaleDateString('en-IN'),
+  },
+];
+
 const PriceList: React.FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [prices, setPrices] = useState<ServicePrice[]>([]);
+  const [prices, setPrices] = useState<PriceFormValues[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPriceForm, setShowPriceForm] = useState(false);
   const { styles } = useStyle();
 
   useEffect(() => {
-    fetchPrices()
-      .then((res) => {
-        setPrices(res);
+    const loadPrices = async () => {
+      try {
+        const data = await fetchPrices();
+        setPrices(data);
+      } catch (err: any) {
+        setError(err.message || 'Error fetching prices');
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-        console.error("Error fetching prices:", err);
-      });
+      }
+    };
+    loadPrices();
   }, []);
 
-  const handleChangePage = (_event: unknown, newPage: number) => setPage(newPage);
-
+  const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -176,47 +147,27 @@ const PriceList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          margin: "20px",
-        }}
-      >
-        <h3>Price Listing</h3>
-        <ConfigProvider button={{ className: styles.linearGradientButton }}>
-          <Button
-            style={{ backgroundColor: "#88E788", color: "whitesmoke" }}
-            onClick={handleAddPrice}
-          >
-            Add Prices
-          </Button>
-        </ConfigProvider>
-      </div>
-
-      {showPriceForm ? (
-        <AddPriceForm
-          onBack={handlePriceFormClose}
-          onSuccess={() => {
-            handlePriceFormClose();
-          }}
-        />
-      ) : (
+   <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
+      {!showPriceForm ? (
         <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '20px' }}>
+            <h3>Price Listing</h3>
+            <ConfigProvider button={{ className: styles.linearGradientButton }}>
+              <Button style={{ backgroundColor: '#88E788', color: 'whitesmoke' }} onClick={handleAddPrice}>
+                Add Prices
+              </Button>
+            </ConfigProvider>
+          </div>
+
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="price table">
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
                     <TableCell
-                      key={column.id as string}
-                      align={column.align}
-                      style={{
-                        minWidth: column.minWidth,
-                        backgroundColor: "#C3C3C3",
-                      }}
+                      key={column.id}
+                      align={column.align ?? 'left'}
+                      style={{ minWidth: column.minWidth ,   backgroundColor: "#E0E0E0",}}
                     >
                       {column.label}
                     </TableCell>
@@ -226,23 +177,15 @@ const PriceList: React.FC = () => {
               <TableBody>
                 {prices
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((price, index) => (
-                    <TableRow hover tabIndex={-1} key={index}>
+                  .map((row, index) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                       {columns.map((column) => {
-                        const value = price[column.id];
-                        let displayValue: React.ReactNode = "-";
-
-                        if (column.format && value !== null && value !== undefined) {
-                          displayValue = column.format(value);
-                        } else if (value instanceof Date) {
-                          displayValue = value.toLocaleDateString("en-IN");
-                        } else if (value !== null && value !== undefined) {
-                          displayValue = value.toString();
-                        }
-
+                        const value = row[column.id];
                         return (
-                          <TableCell key={column.id as string} align={column.align}>
-                            {displayValue}
+                          <TableCell key={column.id} align={column.align ?? 'left'}>
+                            {column.format && value !== undefined && value !== null
+                              ? String(column.format(value))
+                              : String(value ?? '-')}
                           </TableCell>
                         );
                       })}
@@ -262,6 +205,15 @@ const PriceList: React.FC = () => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </>
+      ) : (
+        <AddPriceForm
+          onBack={handlePriceFormClose}
+          onSuccess={async () => {
+            handlePriceFormClose();
+            const updated = await fetchPrices();
+            setPrices(updated);
+          }}
+        />
       )}
     </Paper>
   );

@@ -147,29 +147,66 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, onSelect }) => {
         />
       )
     },
+    
+ {
+  key: '11',
+  label: (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        whiteSpace: 'normal',
+        wordBreak: 'break-word',
+        lineHeight: 1.4,
+        fontSize: 14,
+        maxWidth: 200,
+      }}
+      title="Add Customer and Service Person"
+    >
+      Add Customer
+      <br />
+      / Service Person
+    </div>
+  ),
+  icon: (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <img
+        src={Orders}
+        alt="Add Customer & Service Person"
+        style={{
+          width: 18,
+          height: 18,
+          objectFit: 'contain',
+        }}
+      />
+    </div>
+  )
+}
+
+
   ];
  
 
   return (
-    <Sider
-      collapsible
-      collapsed={collapsed}
-      collapsedWidth={80}
-      trigger={null}
-      className='bg-background color-globalSecondary m-h-[100vh]'
-    >
-      <div className="text-2xl text-center mt-5 mb-5 font-bold whitespace-nowrap bg-[linear-gradient(115deg,#88b448,#214738,#34735b)] text-transparent bg-clip-text">
-        ClickNClean
-      </div>
-      <Menu
-        mode="inline"
-        selectedKeys={[selectedKey]}
-        items={items}
-        onClick={handleMenuClick}
-       className='bg-background color-globalSecondary'
-      />
-    </Sider>
-  );
+      <Sider
+    collapsible
+    collapsed={collapsed}
+    collapsedWidth={80}
+    trigger={null}
+    style={{ backgroundColor: '#BCE27F', minHeight: '100vh' }} // ✅ Apply background color here
+  >
+    <div className="text-2xl text-center mt-5 mb-5 font-bold whitespace-nowrap bg-[linear-gradient(115deg,#88b448,#214738,#34735b)] text-transparent bg-clip-text">
+      ClickNClean
+    </div>
+    <Menu
+      mode="inline"
+      selectedKeys={[selectedKey]}
+      items={items}
+      onClick={handleMenuClick}
+      style={{ backgroundColor: '#BCE27F' }} // ✅ Apply background color here too
+    />
+  </Sider>
+);
 };
 
 export default AppSidebar;

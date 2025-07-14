@@ -10,9 +10,8 @@ import {
   TableRow,
   Avatar,
 } from "@mui/material";
-import { Button, ConfigProvider, Select, Tabs, Tag } from "antd";
+import { Select, Tabs, Tag } from "antd";
 import { createStyles } from "antd-style";
-import AddServicePerson from "../Master/AddServicePerson";
 import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
@@ -147,7 +146,6 @@ const ServicePersonList: React.FC = () => {
   const { styles } = useStyle();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [showForm, setShowForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"active" | "pending">("active");
 
   const [servicePersons, setServicePersons] = useState<ServicePerson[]>(() => {
@@ -170,107 +168,96 @@ const ServicePersonList: React.FC = () => {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", padding: 2 }}>
-      {showForm ? (
-        <AddServicePerson onBack={() => setShowForm(false)} />
-      ) : (
-        <>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-            <h3>Service Person Listing</h3>
-            <ConfigProvider button={{ className: styles.linearGradientButton }}>
-              <Button type="primary" onClick={() => setShowForm(true)}>
-                Add Service Person
-              </Button>
-            </ConfigProvider>
-          </div>
+      <div style={{ marginBottom: 16 }}>
+        <h3>Service Person Listing</h3>
+      </div>
 
-          <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key as "active" | "pending")}>
-            <TabPane tab="Active" key="active" />
-            <TabPane tab="Pending" key="pending" />
-          </Tabs>
+      <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key as "active" | "pending")}>
+        <TabPane tab="Active" key="active" />
+        <TabPane tab="Pending" key="pending" />
+      </Tabs>
 
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  {columns.map((col) => (
-                    <TableCell key={col.id}>{col.label}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredRows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow hover key={row.email}>
-                      {columns.map((col) => {
-                        const value = row[col.id as keyof ServicePerson];
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {columns.map((col) => (
+                <TableCell key={col.id}>{col.label}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredRows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow hover key={row.email}>
+                  {columns.map((col) => {
+                    const value = row[col.id as keyof ServicePerson];
 
-                        if (col.id === "profilephoto") {
-                          const photoUrl = row.profilephoto?.[0]?.url || "https://via.placeholder.com/40";
-                          return (
-                            <TableCell key={col.id}>
-                              <Avatar src={photoUrl} />
-                            </TableCell>
-                          );
-                        }
+                    if (col.id === "profilephoto") {
+                      const photoUrl = row.profilephoto?.[0]?.url || "https://via.placeholder.com/40";
+                      return (
+                        <TableCell key={col.id}>
+                          <Avatar src={photoUrl} />
+                        </TableCell>
+                      );
+                    }
 
-                        if (col.id === "dateTime") {
-                          return (
-                            <TableCell key={col.id}>
-                              {dayjs(row.dateTime).format("DD/MM/YYYY hh:mm A")}
-                            </TableCell>
-                          );
-                        }
+                    if (col.id === "dateTime") {
+                      return (
+                        <TableCell key={col.id}>
+                          {dayjs(row.dateTime).format("DD/MM/YYYY hh:mm A")}
+                        </TableCell>
+                      );
+                    }
 
-                        if (col.id === "status") {
-                          if (activeTab === "pending") {
-                            return (
-                              <TableCell key={col.id}>
-                                <Select
-                                  value={row.status}
-                                  onChange={(val) => handleStatusChange(row.email, val)}
-                                  style={{ width: 100 }}
-                                >
-                                  <Option value="pending">Pending</Option>
-                                  <Option value="active">Active</Option>
-                                </Select>
-                              </TableCell>
-                            );
-                          } else {
-                            return (
-                              <TableCell key={col.id}>
-                                <Tag>Completed</Tag>
-                              </TableCell>
-                            );
-                          }
-                        }
-
+                    if (col.id === "status") {
+                      if (activeTab === "pending") {
                         return (
                           <TableCell key={col.id}>
-                            {typeof value === "string" || typeof value === "number" ? value : "-"}
+                            <Select
+                              value={row.status}
+                              onChange={(val) => handleStatusChange(row.email, val)}
+                              style={{ width: 100 }}
+                            >
+                              <Option value="pending">Pending</Option>
+                              <Option value="active">Active</Option>
+                            </Select>
                           </TableCell>
                         );
-                      })}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                      } else {
+                        return (
+                          <TableCell key={col.id}>
+                            <Tag>Completed</Tag>
+                          </TableCell>
+                        );
+                      }
+                    }
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={filteredRows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={(_, newPage) => setPage(newPage)}
-            onRowsPerPageChange={(e) => {
-              setRowsPerPage(parseInt(e.target.value, 10));
-              setPage(0);
-            }}
-          />
-        </>
-      )}
+                    return (
+                      <TableCell key={col.id}>
+                        {typeof value === "string" || typeof value === "number" ? value : "-"}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredRows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={(_, newPage) => setPage(newPage)}
+        onRowsPerPageChange={(e) => {
+          setRowsPerPage(parseInt(e.target.value, 10));
+          setPage(0);
+        }}
+      />
     </Paper>
   );
 };

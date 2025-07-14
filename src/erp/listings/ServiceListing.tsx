@@ -11,10 +11,9 @@ import {
 } from "@mui/material";
 import { Button, ConfigProvider } from "antd";
 import { createStyles } from "antd-style";
-import { fetchServices} from "../../api/ServiceApi"; // You should define this
+import { fetchServices } from "../../api/ServiceApi";
 import type { ServiceMaster } from "../../types/services";
 import AddServiceForm from "../Master/AddServiceForm";
-import AddAdvertisementForm from "../Master/AddServiceForm";
 
 interface Column<T = ServiceMaster> {
   id: keyof T;
@@ -69,7 +68,8 @@ const ServiceMasterList: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const { styles } = useStyle();
 
-  useEffect(() => {
+  const fetchServiceList = () => {
+    setLoading(true);
     fetchServices()
       .then((res) => {
         setServices(res);
@@ -80,38 +80,56 @@ const ServiceMasterList: React.FC = () => {
         setLoading(false);
         console.error("Failed to fetch services:", err);
       });
+  };
+
+  useEffect(() => {
+    fetchServiceList();
   }, []);
 
   const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
   const handleAddClick = () => setShowForm(true);
-  const handleFormClose = () => setShowForm(false);
+  const handleFormClose = () => {
+    setShowForm(false);
+    fetchServiceList(); // Refresh list on successful add
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: 20 }}>
-        <h3>Service Master List</h3>
-        <ConfigProvider button={{ className: styles.linearGradientButton }}>
-          <Button
-            type="primary"
-            style={{ backgroundColor: "#4CAF50", color: "#fff" }}
-            onClick={handleAddClick}
-          >
-            Add Service
-          </Button>
-        </ConfigProvider>
-      </div>
+      {!showForm && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            margin: 20,
+          }}
+        >
+          <h3>Service Master List</h3>
+          <ConfigProvider button={{ className: styles.linearGradientButton }}>
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#4CAF50", color: "#fff" }}
+              onClick={handleAddClick}
+            >
+              Add Service
+            </Button>
+          </ConfigProvider>
+        </div>
+      )}
 
       {showForm ? (
-         <AddServiceForm onBack={() => setShowForm(false)} onSuccess={handleAddClick} />
+        <AddServiceForm onBack={handleFormClose} onSuccess={handleFormClose} />
       ) : (
         <>
           <TableContainer sx={{ maxHeight: 440 }}>
@@ -122,7 +140,10 @@ const ServiceMasterList: React.FC = () => {
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      style={{ minWidth: column.minWidth, backgroundColor: "#E0E0E0" }}
+                      style={{
+                        minWidth: column.minWidth,
+                        backgroundColor: "#E0E0E0",
+                      }}
                     >
                       {column.label}
                     </TableCell>
@@ -130,18 +151,22 @@ const ServiceMasterList: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((service, index) => (
-                  <TableRow hover key={index}>
-                    {columns.map((column) => {
-                      const value = service[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format ? column.format(value) : value ?? "-"}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                {services
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((service, index) => (
+                    <TableRow hover key={index}>
+                      {columns.map((column) => {
+                        const value = service[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format
+                              ? column.format(value)
+                              : value ?? "-"}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
