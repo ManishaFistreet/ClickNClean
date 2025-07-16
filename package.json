@@ -16,6 +16,7 @@
     "@headlessui/react": "^2.2.4",
     "@mui/icons-material": "^7.2.0",
     "@mui/material": "^7.2.0",
+    "@react-google-maps/api": "^2.20.7",
     "antd": "^5.26.3",
     "antd-style": "^3.7.1",
     "apexcharts": "^4.7.0",

@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { LuCircleUserRound } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "../types/services";
 import AuthWrapper from "./AuthWrapper";
+import { toast } from "react-toastify";
 
 const UserMenu = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ Get current route
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -25,16 +26,21 @@ const UserMenu = () => {
     }
   }, []);
 
+  // ✅ Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // ✅ Close dropdown on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -73,59 +79,54 @@ const UserMenu = () => {
                 </button>
               </div>
               <ul className="p-2 space-y-2 text-sm text-gray-700">
-                <li>
-                  <a href="#profile" className="block hover:text-globalPrimary">
-                    My Profile
-                  </a>
-                </li>
-                <li>
-                  <a href="/my-bookings" className="block hover:text-globalPrimary">
-                    My Bookings
-                  </a>
-                </li>
-                <li>
-                  <a href="#address" className="block hover:text-globalPrimary">
-                    Saved Address
-                  </a>
-                </li>
-                <li>
-                  <a href="#help" className="block hover:text-globalPrimary">
-                    Help Desk
-                  </a>
-                </li>
+                <li><a href="/profile" className="block hover:text-globalPrimary">My Profile</a></li>
+                <li><a href="/my-bookings" className="block hover:text-globalPrimary">My Bookings</a></li>
+                <li><a href="/address" className="block hover:text-globalPrimary">Saved Address</a></li>
+                <li><a href="/help" className="block hover:text-globalPrimary">Help Desk</a></li>
               </ul>
             </>
           ) : (
-            <>
-              <div className="p-4 border-b border-gray-200">
-                <button
+            <div className="p-4 border-b border-gray-200">
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="w-full bg-globalPrimary text-white py-2 rounded hover:bg-opacity-90 transition"
+              >
+                Sign In
+              </button>
+              <p className="text-sm text-gray-500 mt-2">
+                New customer?{" "}
+                <span
+                  className="text-globalPrimary underline cursor-pointer"
                   onClick={() => setShowAuthModal(true)}
-                  className="w-full bg-globalPrimary text-white py-2 rounded hover:bg-opacity-90 transition"
                 >
-                  Sign In
-                </button>
-                <p className="text-sm text-gray-500 mt-2">
-                  New customer?{" "}
-                  <span
-                    className="text-globalPrimary underline cursor-pointer"
-                    onClick={() => setShowAuthModal(true)}
-                  >
-                    Start here
-                  </span>
-                </p>
-              </div>
-            </>
+                  Start here
+                </span>
+              </p>
+            </div>
           )}
         </div>
       )}
+
       {showAuthModal && (
         <AuthWrapper
-          onClose={() => setShowAuthModal(false)}
-          onSuccess={(user) => {
+          onSuccess={(user, token) => {
+            if (user && token) {
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("token", token);
+               toast.success("Login successful! 👋", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  
+            }
             setUser(user);
-            localStorage.setItem("user", JSON.stringify(user));
             setShowAuthModal(false);
             setOpen(false);
+          }}
+          onClose={() => setShowAuthModal(false)}
+          onRequireRegister={(phone: string) => {
+            setShowAuthModal(false);
+            navigate(`/register?phone=${phone}`);
           }}
         />
       )}
