@@ -11,6 +11,7 @@ import {
 import { Paper } from "@mui/material";
 import type { User } from "../../types/services";
 import Button from "../../components/Button";
+import { createUserByAdmin } from "../../api/ServiceApi";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -18,10 +19,16 @@ const { Option } = Select;
 const AddUserAndServicePersonForm: React.FC = () => {
   const [form] = Form.useForm<User>();
 
-  const handleFinish = (values: User) => {
-    console.table(values);
-    message.success("Customer saved (dummy)!");
-    form.resetFields();
+  const handleFinish = async (values: User) => {
+    try {
+      console.table(values);
+      await createUserByAdmin(values);
+      message.success("User created successfully");
+      form.resetFields();
+    } catch (error) {
+      console.error("Failed to create user", error);
+      message.error("Error creating user");
+    }
   };
 
   return (
@@ -112,13 +119,18 @@ const AddUserAndServicePersonForm: React.FC = () => {
         </Row>
 
         <Form.Item style={{ marginTop: 16 }}>
-          <Button variant='secondary' style={{ padding: "6px 24px" }}>
+          <Button type="submit" style={{ padding: "6px 24px" }}>
             Submit
           </Button>
-          <Button variant='outline'style={{ marginLeft: 12, padding: "6px 24px" }}>
+          <Button
+            variant="outline"
+            style={{ marginLeft: 12, padding: "6px 24px" }}
+            onClick={() => form.resetFields()}
+          >
             Cancel
           </Button>
         </Form.Item>
+
       </Form>
     </Paper>
   );

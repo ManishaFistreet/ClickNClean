@@ -121,7 +121,7 @@ export const fetchAllUsers = async () => {
 
 export const fetchServicePersons = async () => {
   try {
-    const res = await api.get('/service-person/all');
+    const res = await api.get('/user/service-person/all');
     return res.data.servicePersons;
   } catch (error) {
     console.error("Error fetching service persons:", error);
@@ -203,7 +203,7 @@ export const fetchAllBookings = async (): Promise<Booking[]> => {
   try {
     const res = await api.get("/bookings/admin");
     console.log(res)
-    return res.data.bookings;
+    return res.data.data;
   } catch (err) {
     console.error("Failed to fetch bookings", err);
     return [];
@@ -260,4 +260,9 @@ export const updateBookingStatus = async (bookingId: string, status: string) => 
 
 export const deleteBooking = async (id: string) => {
   await api.delete(`/bookings/${id}`);
+};
+
+export const createUserByAdmin = async (user: Partial<User>) => {
+  const res = await api.post("/user/admin", user);
+  return res.data.user;
 };

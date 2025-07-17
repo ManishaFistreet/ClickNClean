@@ -17,7 +17,7 @@ const AdminBookings: React.FC = () => {
         fetchAllUsers(),
         fetchServicePersons(),
       ]);
-      console.log("Userss Response:", usersRes);
+      console.log("Userss Response:", bookingRes);
       setBookings(bookingRes)
       setUsers(usersRes.users);
       setServicePersons(spRes);
@@ -35,8 +35,11 @@ const AdminBookings: React.FC = () => {
     }
   };
 
-  const extractUserId = (user: string | { _id: string }) =>
-    typeof user === "string" ? user : user._id;
+  const extractUserId = (booking: Booking) => {
+    if (!booking.user) return '';
+    return booking.user._id;
+  };
+
 
   const getUserById = (userId: string) =>
     users.find((u) => u.id === userId)?.name || "Unknown";
@@ -85,7 +88,7 @@ const AdminBookings: React.FC = () => {
             >
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">
-                  {getUserById(extractUserId(booking.user))}
+                  {getUserById(extractUserId(booking))}
 
                 </h3>
                 <span className="text-sm text-gray-600">

@@ -40,9 +40,6 @@ export default function MasterRoute() {
       default: return <Dashboard />;
     }
   };
-
-  console.log("Active page key --",activePageKey);
-
   return (
     <ConfigProvider
       theme={{
