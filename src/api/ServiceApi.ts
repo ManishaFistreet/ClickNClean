@@ -1,15 +1,10 @@
 import axios from "axios";
 import type { AddShowcasePayload } from "../erp/Master/AddAdvertisementForm";
 import type { PriceFormValues, Booking, BookingPayload, Coupon, ServiceShowcase, User } from "../types/services";
-import  type {OrderBookingFormValues} from "../types/services"
+import type { OrderBookingFormValues } from "../types/services"
 import type { LoginLog } from "../types/services";
 
-interface GetMyBookingsResponse {
-  success: boolean;
-  bookings: Booking[];
-}
-
-const BASE_URL = "http://192.168.1.130:5000/api";
+const BASE_URL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -36,8 +31,8 @@ export const registerUserApi = async (data: {
   role: string;
 }) => {
   const res = await api.post<{
-    message: string; success: boolean; user: User; token: string 
-}>(
+    message: string; success: boolean; user: User; token: string
+  }>(
     "/user/register",
     data
   );
@@ -123,19 +118,30 @@ export const fetchAllUsers = async () => {
     return [];
   }
 }
+
+export const fetchServicePersons = async () => {
+  try {
+    const res = await api.get('/service-person/all');
+    return res.data.servicePersons;
+  } catch (error) {
+    console.error("Error fetching service persons:", error);
+    return [];
+  }
+};
+
 export const fetchOrderBooking = async (): Promise<OrderBookingFormValues[]> => {
   const res = await api.get("/bookings");
   return res.data;
 };
 
 export const fetchLoginLogs = async (): Promise<LoginLog[]> => {
-  try{
-  const response = await api.get("/loginlogs");
-  return response.data;
-} catch(error){
-  console.error("Error fetching LoginListing:", error);
-  return[];
-}
+  try {
+    const response = await api.get("/loginlogs");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching LoginListing:", error);
+    return [];
+  }
 }
 
 export const createLoginLog = async (data: LoginLog): Promise<void> => {
@@ -166,7 +172,7 @@ export const fetchSubServices = async (serviceId: string) => {
 export const fetchCoupons = async (cartValue: number) => {
   try {
     const res = await api.get("/coupons/list");
-     return res.data.filter(
+    return res.data.filter(
       (coupon: Coupon) => !coupon.minOrderValue || coupon.minOrderValue <= cartValue
     );
   } catch (error) {
@@ -193,24 +199,16 @@ export const createBooking = async (data: BookingPayload): Promise<{ success: bo
   }
 };
 
-export const getMyBookings = async (userId: string): Promise<GetMyBookingsResponse> => {
+export const fetchAllBookings = async (): Promise<Booking[]> => {
   try {
-    const token = localStorage.getItem("token");
-    const res = await api.get(`/bookings/my-bookings/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return res.data as GetMyBookingsResponse;
-  } catch (error) {
-    console.error("Error fetching bookings:", error);
-    return {
-      success: false,
-      bookings: [],
-    };
+    const res = await api.get("/bookings/admin");
+    console.log(res)
+    return res.data.bookings;
+  } catch (err) {
+    console.error("Failed to fetch bookings", err);
+    return [];
   }
 };
-
 
 export const cancelBooking = async (bookingId: string): Promise<{ success: boolean; message: string }> => {
   try {
@@ -223,4 +221,43 @@ export const cancelBooking = async (bookingId: string): Promise<{ success: boole
     console.error("Cancel booking error:", error);
     return { success: false, message: "Failed to cancel booking" };
   }
+};
+
+export const getMyBookings = async (userId: string): Promise<{ success: boolean; bookings?: Booking[]; message?: string }> => {
+  try {
+    const res = await api.get(`/bookings/my-bookings/${userId}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    return { success: false, message: "Could not fetch user bookings" };
+  }
+};
+
+export const assignServicePerson = async (bookingId: string, servicePersonId: string) => {
+  try {
+    const response = await api.put(`/bookings/assign/${bookingId}`, {
+      servicePersonId,
+    });
+    return response.data;
+  } catch (err) {
+    console.error('Failed to assign service person:', err);
+    throw err;
+  }
+};
+
+export const rescheduleBooking = async (id: string, newDate: string, newTime: string) => {
+  await api.put(`/bookings/reschedule/${id}`, { newDate, newTime });
+};
+
+export const updateBookingStatus = async (bookingId: string, status: string) => {
+  const res = await api.put(`/bookings/update-status/${bookingId}`, {status});
+  return res.data
+};
+
+export const deleteBooking = async (id: string) => {
+  await api.delete(`/bookings/${id}`);
 };

@@ -134,6 +134,7 @@ export interface User {
 export interface OrderBookingFormValues {
   uniqueId: string;
   booking_id: string;
+  service_id: string;
   service_category: string;
   service_code: string;
   offer_code: string;
@@ -262,23 +263,31 @@ export interface BookingService {
 
 export interface Booking {
   _id: string;
-  user: string;
-  services: BookingService[];
+  user: {
+    _id: string;
+    name: string;
+    phone: string;
+    email: string;
+  };
   schedule: {
     date: string;
     time: string;
   };
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  paymentStatus: "pending" | "paid";
+  paymentStatus: string;
   subtotal: number;
   gstTotal: number;
   grandTotal: number;
-  createdAt: string;
-  updatedAt: string;
-  status: string;
+  services: {
+    serviceCode: string;
+    quantity: number;
+    price: number;
+    gstAmount: number;
+    totalWithGst: number;
+    serviceId?: {
+      serviceName: string;
+      currentActivePrice: number;
+    };
+  }[];
+  assignedTo?: User;
+  confirmationStatus: "pending" | "confirmed" | "rejected";
 }
