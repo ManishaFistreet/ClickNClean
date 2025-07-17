@@ -9,7 +9,7 @@ interface GetMyBookingsResponse {
   bookings: Booking[];
 }
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://192.168.1.130:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -32,11 +32,12 @@ export const verifyOtpApi = async (phone: string, otp: string) => {
 export const registerUserApi = async (data: {
   name: string;
   email: string;
-  password: string;
   phone: string;
   role: string;
 }) => {
-  const res = await api.post<{ success: boolean; user: User; token: string }>(
+  const res = await api.post<{
+    message: string; success: boolean; user: User; token: string 
+}>(
     "/user/register",
     data
   );
