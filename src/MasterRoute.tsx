@@ -10,7 +10,6 @@ import DashboardHeader from "./components/DashboardMaster";
 import PackageList from "./erp/listings/PackageList";
 import LogInLogsList from "./erp/listings/LogINLogList";
 import PriceList from "./erp/listings/PriceList";
-
 import ServiceMasterList from "./erp/listings/ServiceListing";
 import ServicePersonList from "./erp/listings/ServicePersonListing";
 import RequestForm from "./erp/Master/RequestForm";
@@ -41,9 +40,6 @@ export default function MasterRoute() {
       default: return <Dashboard />;
     }
   };
-
-  console.log("Active page key --",activePageKey);
-
   return (
     <ConfigProvider
       theme={{
