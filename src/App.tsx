@@ -1,3 +1,4 @@
+// Update your App.tsx
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -15,6 +16,8 @@ import MyOrders from "./pages/MyOrders";
 import AuthWrapper from "./components/AuthWrapper";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
+
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -54,7 +57,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {!masterRoute && (
-        <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
+        <>
+          
+          <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
+        </>
       )}
       <main className="flex-grow">
         <Routes>
