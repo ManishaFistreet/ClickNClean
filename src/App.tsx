@@ -1,3 +1,4 @@
+// Update your App.tsx
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,11 @@ import type { CartItem, CartItemBase } from "./types/services";
 import MasterRoute from "./MasterRoute";
 import CartPage from "./pages/CartSection";
 import MyOrders from "./pages/MyOrders";
+import AuthWrapper from "./components/AuthWrapper";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -51,7 +57,10 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {!masterRoute && (
-        <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
+        <>
+          
+          <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
+        </>
       )}
       <main className="flex-grow">
         <Routes>
@@ -73,15 +82,41 @@ function App() {
           <Route path="/master/*" element={<MasterRoute />} />
           <Route
             path="/cart"
-            element={<CartPage cart={cart} onRemoveFromCart={handleRemoveFromCart} />}
+            element={
+              <CartPage cart={cart} onRemoveFromCart={handleRemoveFromCart} />
+            }
           />
-          <Route path="/my-bookings"
-            element={<MyOrders />} />
+          <Route path="/my-bookings" element={<MyOrders />} />
+          <Route path="/register" element={<RegisterRouteWrapper />} />
         </Routes>
       </main>
       {!masterRoute && <Footer />}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
 
 export default App;
+
+// 👇 Inline wrapper for register route
+const RegisterRouteWrapper = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const phone = params.get("phone") || "";
+
+  return (
+    <AuthWrapper
+      phoneProp={phone}
+      onSuccess={(user, token) => {
+        if (user && token) {
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", token);
+            toast.success("Registration successful! 🎉");
+        }
+        navigate("/");
+      }}
+      onClose={() => navigate("/")}
+    />
+  );
+};
