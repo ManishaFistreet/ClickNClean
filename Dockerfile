@@ -1,12 +1,26 @@
-# Stage 1: Build with Node + Vite
-FROM node:18-alpine AS builder
+# Use official Node.js image
+FROM node:18-alpine
+
+# Set working directory
 WORKDIR /app
-COPY . .
+
+# Copy dependencies
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
+
+# Copy the rest of the code
+COPY . .
+
+# Build the frontend
 RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Install Vite globally to run preview
+RUN npm install -g vite
+
+# Expose the port
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Run Vite preview server on port 80
+CMD ["vite", "preview", "--port", "80", "--host"]
