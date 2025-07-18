@@ -7,5 +7,5 @@ services:
       dockerfile: Dockerfile
     image: clicknclean-frontend
     ports:
-      - "4021:80"
+      - "4003:80"
     restart: unless-stopped
