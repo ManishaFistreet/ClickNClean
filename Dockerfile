@@ -23,4 +23,4 @@ RUN npm install -g vite
 EXPOSE 80
 
 # Run Vite preview server on port 80
-CMD ["vite", "preview", "--port", "80", "--host"]
+CMD ["vite", "preview", "--port", "80", "--host", "0.0.0.0"]
