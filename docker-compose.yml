@@ -1,27 +1,11 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  backend:
-    image: manishafistreet/cleaning-app-backend:latest
-    build:
-      context: ./cleaning-app-backend
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    restart: unless-stopped
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/cleaning-app
-      - NODE_ENV=production
-    volumes:
-      - ./cleaning-app-backend:/app
-
   frontend:
-    image: manishafistreet/clicknclean:latest
     build:
-      context: ./ClickNClean
+      context: .
       dockerfile: Dockerfile
+    image: clicknclean-frontend
     ports:
-      - "3000:3000"
+      - "4021:80"
     restart: unless-stopped
-    volumes:
-      - ./ClickNClean:/app
