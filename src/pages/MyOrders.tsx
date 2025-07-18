@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { Booking } from "../types/services";
-import { fetchServiceById, getMyBookings, rescheduleBooking } from "../api/ServiceApi";
+import { getMyBookings, rescheduleBooking } from "../api/ServiceApi";
 
 export interface ServiceDetail {
   _id: string;
@@ -23,6 +23,23 @@ export interface ServiceDetail {
   priceType: string;
 }
 
+type ServiceFromBooking = {
+  _id: string;
+  serviceCode: string;
+  serviceName: string;
+  serviceDetail: string;
+  minHours: number;
+  maxHours?: number;
+  currentActivePrice: number;
+  priceType: string;
+  minPersonRequired?: number;
+  serviceCategory: string;
+  serviceActiveStatus: boolean;
+  serviceAppIcon?: string;
+  serviceWebImage?: string;
+  showoffPriceTag?: string;
+};
+
 const MyBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +48,7 @@ const MyBookings = () => {
   const [serviceDetails, setServiceDetails] = useState<ServiceDetail[]>([]);
   const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState<string>("");
-   const [rescheduleTime, setRescheduleTime] = useState<string>("");
+  const [rescheduleTime, setRescheduleTime] = useState<string>("");
 
   const fetchBookings = useCallback(async () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -48,15 +65,13 @@ const MyBookings = () => {
     fetchBookings();
   }, [fetchBookings]);
 
-const handleOpenServiceDetail = async (bookingId: string) => {
-  setLoading(true);
-  try {
-    const booking = bookings.find((b) => b._id === bookingId);
-    if (!booking) return;
-
-    const fetchedDetails: ServiceDetail[] = await Promise.all(
-      booking.services.map(async (s) => {
-        const res = await fetchServiceById(s.serviceId);
+  const handleOpenServiceDetail = async (bookingId: string) => {
+    setLoading(true);
+    try {
+      const booking = bookings.find((b) => b._id === bookingId);
+      if (!booking) return;
+      const fetchedDetails: ServiceDetail[] = booking.services.map((s) => {
+        const res = s.serviceId as ServiceFromBooking;
         return {
           _id: res._id,
           image: res.serviceWebImage || "",
@@ -67,17 +82,16 @@ const handleOpenServiceDetail = async (bookingId: string) => {
           category: res.serviceCategory,
           priceType: res.priceType,
         };
-      })
-    );
+      });
 
-    setServiceDetails(fetchedDetails);
-    setOpen(true);
-  } catch (error) {
-    console.error("Failed to fetch service details", error);
-  } finally {
-    setLoading(false);
-  }
-};
+      setServiceDetails(fetchedDetails);
+      setOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch service details", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCloseModal = () => {
     setSelectedBooking(null);
@@ -213,7 +227,7 @@ const handleOpenServiceDetail = async (bookingId: string) => {
             label="New Date & Time"
             fullWidth
             InputLabelProps={{ shrink: true }}
-            onChange={(e) => {setRescheduleDate(e.target.value); setRescheduleTime(e.target.value)}}
+            onChange={(e) => { setRescheduleDate(e.target.value); setRescheduleTime(e.target.value) }}
           />
         </DialogContent>
         <DialogActions>
