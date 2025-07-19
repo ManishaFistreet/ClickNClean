@@ -1,26 +1,12 @@
-# Use official Node.js image
-FROM node:18-alpine
-
-# Set working directory
+# frontend/Dockerfile
+FROM node:18 AS build
 WORKDIR /app
-
-# Copy dependencies
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the code
 COPY . .
-
-# Build the frontend
+RUN npm install
 RUN npm run build
 
-# Install Vite globally to run preview
-RUN npm install -g vite
-
-# Expose the port
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-
-# Run Vite preview server on port 80
-CMD ["vite", "preview", "--port", "80", "--host", "0.0.0.0"]
+CMD ["nginx", "-g", "daemon off;"]
