@@ -4,7 +4,8 @@ import type { PriceFormValues, Booking, BookingPayload, Coupon, ServiceShowcase,
 import type { OrderBookingFormValues } from "../types/services"
 import type { LoginLog } from "../types/services";
 
-const BASE_URL = "http://20.0.8.5:4004/api";
+// const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://backend:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,

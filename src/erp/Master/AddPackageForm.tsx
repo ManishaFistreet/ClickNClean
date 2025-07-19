@@ -57,7 +57,7 @@ const AddPackageForm: React.FC<AddPackageFormProps> = ({ onBack }) => {
         formData.append("packageImageApp", values.packageImageApp[0].originFileObj);
       }
 
-      await axios.post("http://20.0.8.5:4004/api/package", formData, {
+      await axios.post("http://localhost:5000/api/package", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
