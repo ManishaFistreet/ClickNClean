@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+    container_name: cleaning-frontend
+    ports:
+      - "4003:80"
+    restart: always
