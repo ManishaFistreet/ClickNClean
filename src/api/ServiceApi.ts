@@ -4,7 +4,8 @@ import type { PriceFormValues, Booking, BookingPayload, Coupon, ServiceShowcase,
 import type { OrderBookingFormValues } from "../types/services"
 import type { LoginLog } from "../types/services";
 
-const BASE_URL = "http://cleaning-backend:5000/api";
+/// <reference types="vite/client" />
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const api = axios.create({
   baseURL: BASE_URL,
