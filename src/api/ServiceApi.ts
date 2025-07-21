@@ -5,7 +5,8 @@ import type { OrderBookingFormValues } from "../types/services"
 import type { LoginLog } from "../types/services";
 
 /// <reference types="vite/client" />
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
