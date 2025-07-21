@@ -26,7 +26,6 @@ type Props = {
 const CartPage = ({ cart, onRemoveFromCart }: Props) => {
   const navigate = useNavigate();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
   const [couponCode, setCouponCode] = useState("");
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
@@ -89,7 +88,6 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
     setCouponCode("");
     localStorage.removeItem("appliedCoupon");
   };
-
   const discount = appliedCoupon
     ? appliedCoupon.discountType === "percentage"
       ? (total * appliedCoupon.discountValue) / 100
@@ -97,8 +95,6 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
     : 0;
 
   const finalTotal = total - discount;
-
-
   const handleSchedule = async () => {
     if (!scheduledDate || !scheduledTime || !scheduledAddress) {
       alert("Please fill all schedule details");
@@ -130,11 +126,7 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
       },
       couponCode: appliedCoupon?.code || null,
     };
-    console.log("Booking payload:", payload);
-
-
     const bookingRes = await createBooking(payload);
-
     if (bookingRes.success) {
       toast.success("Your booking has been placed successfully!");
       navigate("/my-bookings");
@@ -144,12 +136,10 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
   };
   const handleLoginSuccess = (loggedInUser: User | null, token: string) => {
     if (!loggedInUser) return;
-
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(loggedInUser));
     setUser(loggedInUser);
     setShowAuthModal(false);
-
     if (pendingScheduleData) {
       setScheduledDate(pendingScheduleData.date);
       setScheduledTime(pendingScheduleData.time);
@@ -160,7 +150,6 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
-
       {showCouponModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -294,7 +283,7 @@ const CartPage = ({ cart, onRemoveFromCart }: Props) => {
         />
       )}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 mt-[6rem]">
         <h2 className="text-2xl font-bold flex items-center gap-2 text-[#37755C]">
           <ShoppingCart className="w-5 h-5" />
           Your Cart

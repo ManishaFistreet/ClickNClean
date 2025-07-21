@@ -121,7 +121,7 @@ const MyBookings = () => {
   if (loading) return <p className="text-center py-6">Loading...</p>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 mt-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 mt-28">
       <h2 className="text-3xl font-bold mb-6 text-center">My Bookings</h2>
 
       {bookings.length === 0 ? (

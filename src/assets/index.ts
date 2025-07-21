@@ -27,6 +27,8 @@ import Orders from "../assets/icons/orders.svg"
 import Dashboard from "../assets/icons/dashboard.svg";
 import TipsYellow from "../assets/icons/tip-yellow.webp";
 import TipsGreen from "../assets/icons/tips-green-tone.jpg";
+import closeX from "../assets/icons/circle-x.svg";
+import mapPin from "../assets/icons/map-pin.svg";
 
 export {
     emptycart,
@@ -57,5 +59,7 @@ export {
     Orders,
     Dashboard,
     TipsYellow,
-    TipsGreen
+    TipsGreen,
+    closeX,
+    mapPin,
 };

@@ -8,6 +8,7 @@ const AdminBookings: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [servicePersons, setServicePersons] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [assignedServicePersons, setAssignedServicePersons] = useState<{ [bookingId: string]: string; }>({});
 
   useEffect(() => {
     const load = async () => {
@@ -17,10 +18,19 @@ const AdminBookings: React.FC = () => {
         fetchAllUsers(),
         fetchServicePersons(),
       ]);
-      console.log("Userss Response:", bookingRes);
       setBookings(bookingRes)
       setUsers(usersRes.users);
       setServicePersons(spRes);
+      const initialAssignments: { [bookingId: string]: string } = {};
+      bookingRes.forEach((booking) => {
+        if (booking.assignedTo) {
+          initialAssignments[booking._id] = typeof booking.assignedTo === "string"
+            ? booking.assignedTo
+            : booking.assignedTo?.id || "";
+        }
+      });
+      setAssignedServicePersons(initialAssignments);
+
       setLoading(false);
     };
     load();
@@ -29,6 +39,10 @@ const AdminBookings: React.FC = () => {
   const handleAssign = async (bookingId: string, personId: string) => {
     try {
       await assignServicePerson(bookingId, personId);
+      setAssignedServicePersons((prev) => ({
+        ...prev,
+        [bookingId]: personId,
+      }));
       alert("Assigned successfully");
     } catch (err) {
       console.error("Error assigning person:", err);
@@ -39,7 +53,6 @@ const AdminBookings: React.FC = () => {
     if (!booking.user) return '';
     return booking.user._id;
   };
-
 
   const getUserById = (userId: string) =>
     users.find((u) => u.id === userId)?.name || "Unknown";
@@ -113,7 +126,7 @@ const AdminBookings: React.FC = () => {
               {booking.confirmationStatus !== "rejected" && (
                 <div className="flex items-center gap-4">
                   <select
-                    value=""
+                    value={assignedServicePersons[booking._id] || ""}
                     onChange={(e) => handleAssign(booking._id, e.target.value)}
                     className="border px-2 py-1 rounded text-sm"
                   >
@@ -126,7 +139,6 @@ const AdminBookings: React.FC = () => {
                       </option>
                     ))}
                   </select>
-
                   <Button variant="outlined" onClick={() => handleConfirm(booking._id)}>
                     Confirm
                   </Button>

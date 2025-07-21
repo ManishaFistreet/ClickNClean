@@ -13,11 +13,9 @@ import type { CartItem, CartItemBase } from "./types/services";
 import MasterRoute from "./MasterRoute";
 import CartPage from "./pages/CartSection";
 import MyOrders from "./pages/MyOrders";
-import AuthWrapper from "./components/AuthWrapper";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -58,7 +56,6 @@ function App() {
     <div className="min-h-screen flex flex-col font-sans">
       {!masterRoute && (
         <>
-          
           <Navbar cartCount={cart.length} onCartClick={() => navigate("/cart")} />
         </>
       )}
@@ -87,7 +84,7 @@ function App() {
             }
           />
           <Route path="/my-bookings" element={<MyOrders />} />
-          <Route path="/register" element={<RegisterRouteWrapper />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </main>
       {!masterRoute && <Footer />}
@@ -97,26 +94,3 @@ function App() {
 }
 
 export default App;
-
-// 👇 Inline wrapper for register route
-const RegisterRouteWrapper = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const phone = params.get("phone") || "";
-
-  return (
-    <AuthWrapper
-      phoneProp={phone}
-      onSuccess={(user, token) => {
-        if (user && token) {
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", token);
-            toast.success("Registration successful! 🎉");
-        }
-        navigate("/");
-      }}
-      onClose={() => navigate("/")}
-    />
-  );
-};

@@ -3,7 +3,6 @@ import { LuCircleUserRound } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "../types/services";
 import AuthWrapper from "./AuthWrapper";
-import { toast } from "react-toastify";
 
 const UserMenu = () => {
   const [open, setOpen] = useState(false);
@@ -11,7 +10,7 @@ const UserMenu = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ Get current route
+  const location = useLocation();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -26,7 +25,6 @@ const UserMenu = () => {
     }
   }, []);
 
-  // ✅ Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -37,7 +35,6 @@ const UserMenu = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Close dropdown on route change
   useEffect(() => {
     setOpen(false);
   }, [location]);
@@ -106,27 +103,21 @@ const UserMenu = () => {
           )}
         </div>
       )}
-
-      {showAuthModal && (
+      {showAuthModal && location.pathname !== "/register" && (
         <AuthWrapper
+          mode="login"
+          onClose={() => setShowAuthModal(false)}
+          onRequireRegister={(phone) => {
+            setShowAuthModal(false);
+            setTimeout(() => {
+              navigate(`/register?phone=${phone}`);
+            }, 0);
+          }}
           onSuccess={(user, token) => {
-            if (user && token) {
-              localStorage.setItem("user", JSON.stringify(user));
-              localStorage.setItem("token", token);
-               toast.success("Login successful! 👋", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  
-            }
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
             setUser(user);
             setShowAuthModal(false);
-            setOpen(false);
-          }}
-          onClose={() => setShowAuthModal(false)}
-          onRequireRegister={(phone: string) => {
-            setShowAuthModal(false);
-            navigate(`/register?phone=${phone}`);
           }}
         />
       )}

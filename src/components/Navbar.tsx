@@ -7,6 +7,7 @@ import UserMenu from "./UserMenu";
 import WelcomeModal from "./WelcomeModal";
 import Button from "./Button";
 import LocationSelectorModal from "./LocationSelectorModal";
+import { mapPin } from "../assets";
 
 type NavbarProps = {
   cartCount: number;
@@ -83,16 +84,15 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
 
       <div className="fixed top-0 left-0 w-full z-50">
         {/* SubHeader */}
-        <div className="bg-white border-b border-gray-100 shadow-sm">
+        <div className="bg-globalPrimary border-b border-gray-100 shadow-sm flex justify-center">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center py-2 px-4 text-sm text-gray-600">
-            <div className="flex items-center gap-6 flex-wrap text-gray-700">
-              {/* 📍 Location Picker */}
+            <div className="flex items-center gap-14 flex-wrap text-white">
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => setShowLocationModal(true)}
               >
-                <span className="text-globalPrimary">📍</span>
-                <span className="ml-1 text-sm font-medium text-gray-700 truncate max-w-[200px]">
+                <img src={mapPin} alt="Location" className="color-white" />
+                <span className="ml-1 text-sm font-medium text-white truncate max-w-[200px]">
                   {userLocation}
                 </span>
               </div>

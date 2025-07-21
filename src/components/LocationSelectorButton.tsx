@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import { MapPin } from "lucide-react";
 import LocationSelectorModal from "./LocationSelectorModal";
+import { useState } from "react";
 
 const LocationSelectorButton = () => {
   const [modalOpen, setModalOpen] = useState(false);

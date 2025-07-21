@@ -3,12 +3,34 @@ import { useLocation } from "react-router-dom";
 import { sendOtpApi, verifyOtpApi, registerUserApi } from "../api/ServiceApi";
 import type { User } from "../types/services";
 import sp from "../assets/images/housekeeping.jpg"
+import { closeX } from "../assets";
+import Button from "./Button";
+
 interface AuthWrapperProps {
   onSuccess: (user: User | null, token: string) => void;
   onClose?: () => void;
   mode?: "login" | "register";
   phoneProp?: string;
   onRequireRegister?: (phone: string) => void;
+}
+
+interface RegisterPayload {
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  street: string;
+  zipCode: string;
+  state: string;
+  role: string;
+  serviceDetails?: {
+    categories: string[];
+    experienceYears: number;
+    availability: {
+      days: string[];
+      timeSlots: string[];
+    };
+  };
 }
 
 const AuthWrapper = ({
@@ -105,7 +127,7 @@ const AuthWrapper = ({
       setLoading(true);
       setError("");
 
-      const payload: any = {
+      const payload: RegisterPayload = {
         name: formData.name,
         email: formData.email,
         phone,
@@ -149,33 +171,39 @@ const AuthWrapper = ({
       {(step === "phone" || step === "otp") && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-xl relative">
-            <button className="absolute right-4 top-3 text-gray-500" onClick={onClose}>
-              ✕
-            </button>
 
             {step === "phone" && (
               <>
-                <h2 className="text-[20px] font-bold mb-4 text-[#28A745]">Enter Phone Number</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-md font-semibold text-text">Enter Phone Number</h2>
+                  <img src={closeX} alt="Close" onClick={onClose} />
+                </div>
+
                 {error && <p className="text-red-600 mb-2">{error}</p>}
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full border px-4 py-2 rounded mb-3"
+                  className="w-full border px-4 py-2 rounded mb-3 focus:border-gray-400 focus:outline-none"
                   placeholder="Phone"
                 />
-                <button
-                  onClick={sendOtp}
-                  className="w-full bg-[#28A745] text-white py-2 rounded"
-                >
-                  Send OTP
-                </button>
+                <div className="mt-3 flex justify-end">
+                  <Button
+                    onClick={sendOtp}
+                    variant="default"
+                  >
+                    Send OTP
+                  </Button>
+                </div>
               </>
             )}
 
             {step === "otp" && (
               <>
-                <h2 className="text-[20px]font-bold mb-4 text-[#28A745]">Enter OTP</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-md font-semibold text-text">Enter OTP</h2>
+                  <img src={closeX} alt="Close" onClick={onClose} />
+                </div>
                 {error && <p className="text-red-600 mb-2">{error}</p>}
                 <input
                   type="text"
@@ -184,12 +212,14 @@ const AuthWrapper = ({
                   className="w-full border px-4 py-2 rounded mb-3"
                   placeholder="OTP"
                 />
-                <button
-                  onClick={verifyOtp}
-                  className="w-full bg-[#28A745] text-white py-2 rounded"
-                >
-                  Verify OTP
-                </button>
+                <div className="mt-3 flex justify-end">
+                  <Button
+                    onClick={verifyOtp}
+                    variant="default"
+                  >
+                    Verify OTP
+                  </Button>
+                </div>
                 {canResend ? (
                   <p className="text-sm mt-2 text-blue-600 cursor-pointer" onClick={sendOtp}>
                     Resend OTP
@@ -227,7 +257,7 @@ const AuthWrapper = ({
 
           {/* Right Side Form */}
           <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-16 z-10">
-            <div className="w-full max-w-md mt-10 bg-[#2a4f3e]  backdrop-blur-md border border-white/20 p-8 rounded-xl shadow-xl text-white">
+            <div className="w-full max-w-md mt-16 bg-[#2a4f3e]  backdrop-blur-md border border-white/20 p-8 rounded-xl shadow-xl text-white">
 
               <h2 className="text-2xl font-bold mb-2">Register Yourself</h2>
               <p className="text-sm text-white/70 mb-6">
