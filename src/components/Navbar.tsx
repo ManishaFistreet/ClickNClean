@@ -57,7 +57,7 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
   const handleLocationSelect = (address: string, lat: number, lng: number) => {
     setUserLocation(address);
     localStorage.setItem("userLocation", JSON.stringify({ address, lat, lng }));
-    setShowLocationModal(false); // ✅ close modal after selecting
+    setShowLocationModal(false);
   };
 
   const filteredCategories = selectedCategory
@@ -105,13 +105,6 @@ const Navbar = ({ cartCount, onCartClick }: NavbarProps) => {
                 <span className="text-globalPrimary">📞</span>
                 <span>800-123-4567</span>
               </div>
-            </div>
-
-            <div className="flex items-center gap-4 mt-2 md:mt-0 text-gray-500">
-              <a href="#"><i className="fab fa-facebook hover:text-globalPrimary"></i></a>
-              <a href="#"><i className="fab fa-twitter hover:text-globalPrimary"></i></a>
-              <a href="#"><i className="fab fa-instagram hover:text-globalPrimary"></i></a>
-              <a href="#"><i className="fab fa-youtube hover:text-globalPrimary"></i></a>
             </div>
           </div>
         </div>

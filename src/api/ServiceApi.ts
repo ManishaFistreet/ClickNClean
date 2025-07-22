@@ -4,8 +4,6 @@ import type { PriceFormValues, Booking, BookingPayload, Coupon, ServiceShowcase,
 import type { OrderBookingFormValues } from "../types/services"
 import type { LoginLog } from "../types/services";
 
-/// <reference types="vite/client" />
-// const BASE_URL = import.meta.env.VITE_BASE_URL;
 const BASE_URL = "http://localhost:5000/api";
 
 const api = axios.create({
@@ -256,7 +254,7 @@ export const rescheduleBooking = async (id: string, newDate: string, newTime: st
 };
 
 export const updateBookingStatus = async (bookingId: string, status: string) => {
-  const res = await api.put(`/bookings/update-status/${bookingId}`, {status});
+  const res = await api.put(`/bookings/update-status/${bookingId}`, { status });
   return res.data
 };
 
